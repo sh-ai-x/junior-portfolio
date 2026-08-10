@@ -1,0 +1,59 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+
+# Java / Kotlin / Gradle
+.gradle/
+build/
+*.class
+*.jar
+*.war
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Go
+bin/
+*.exe
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Secrets / Local config
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Test artifacts
+coverage/
+.nyc_output/
+*.lcov
+
+# dev-kit runtime
+.dev-kit/round-*/
+.dev-kit/.session-*
+
+# Build artifacts
+target/

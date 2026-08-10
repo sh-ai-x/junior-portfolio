@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>신입 개발자 포트폴리오 제안 — 26개사 리서치 기반</title>
+<style>
+  :root{
+    --bg:#fafaf9;--surface:#ffffff;--surface-2:#f4f4f3;
+    --border:#e7e5e4;--border-strong:#d6d3d1;
+    --text:#1c1917;--text-2:#44403c;--text-3:#78716c;
+    --accent:#0f172a;--accent-2:#334155;--link:#0d6efd;
+    --good:#15803d;--warn:#b45309;--bad:#b91c1c;
+    --code-bg:#0f172a;--code-fg:#e2e8f0;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+    --radius:14px;--radius-sm:8px;
+    --mono: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,monospace;
+    --sans: -apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard","Apple SD Gothic Neo","Helvetica Neue",Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b0c0d;--surface:#131517;--surface-2:#1a1d21;
+      --border:#26292d;--border-strong:#3a3f45;
+      --text:#f5f5f4;--text-2:#d6d3d1;--text-3:#a8a29e;
+      --accent:#f8fafc;--accent-2:#cbd5e1;--link:#7dd3fc;
+      --code-bg:#020617;--code-fg:#e2e8f0;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.5);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--sans);background:var(--bg);color:var(--text);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.65;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px}
+  header.hero{
+    background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);
+    color:#f8fafc;border-radius:20px;padding:48px 40px;margin-bottom:24px;
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  header.hero::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse at top right, rgba(125,211,252,.18), transparent 60%);
+    pointer-events:none;
+  }
+  header.hero .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+    color:#e2e8f0;font-size:12px;font-weight:600;
+    padding:5px 12px;border-radius:999px;letter-spacing:.02em;
+  }
+  header.hero h1{font-size:40px;line-height:1.15;margin:16px 0 8px;letter-spacing:-.02em;font-weight:700}
+  header.hero .lede{font-size:18px;color:#cbd5e1;max-width:620px;margin:0}
+  header.hero .meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:24px;font-size:13px;color:#94a3b8}
+  header.hero .meta span{white-space:nowrap}
+  header.hero .meta b{color:#e2e8f0;font-weight:600}
+  .lede2{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;
+    color:var(--text-2);font-size:14px;
+  }
+  .lede2 b{color:var(--text)}
+  section.card{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:28px 28px 24px;margin-bottom:20px;box-shadow:var(--shadow);
+  }
+  section.card h2{
+    margin:0 0 8px;font-size:22px;font-weight:700;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:10px;
+  }
+  section.card h2 .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:8px;background:var(--surface-2);
+    color:var(--text-2);font-size:14px;font-weight:700;border:1px solid var(--border);
+  }
+  section.card .subtitle{margin:0 0 16px;color:var(--text-3);font-size:14px}
+  section.card p{margin:0 0 12px;color:var(--text-2)}
+  section.card ul{margin:8px 0 0;padding-left:20px;color:var(--text-2)}
+  section.card li{margin:6px 0}
+  section.card li b{color:var(--text);font-weight:600}
+  .company-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:8px;margin-top:8px;
+  }
+  .company-chip{
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:8px 12px;
+    font-size:13px;color:var(--text);font-weight:500;
+  }
+  .company-chip .cat{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+  .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px}
+  .theme-card{
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px 16px;
+  }
+  .theme-card .label{
+    display:inline-block;font-size:11px;font-weight:700;
+    letter-spacing:.05em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;
+  }
+  .theme-card .body{font-size:14px;color:var(--text);font-weight:600;margin-bottom:6px}
+  .theme-card .desc{font-size:13px;color:var(--text-2);line-height:1.55}
+  .pre{
+    background:var(--code-bg);color:var(--code-fg);border-radius:var(--radius-sm);
+    padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.55;
+    overflow-x:auto;position:relative;margin:8px 0 4px;border:1px solid #1e293b;
+  }
+  .pre .comment{color:#94a3b8;font-style:italic}
+  .pre .key{color:#7dd3fc}
+  .pre .str{color:#86efac}
+  .pre .cmd{color:#fda4af}
+  .pre .path{color:#fcd34d}
+  .copy-btn{
+    position:absolute;top:8px;right:8px;background:rgba(255,255,255,.08);
+    color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:6px;
+    font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;
+    font-family:var(--sans);transition:background .15s ease;
+  }
+  .copy-btn:hover{background:rgba(255,255,255,.16)}
+  .copy-btn.copied{background:#15803d;border-color:#15803d;color:#fff}
+  table.portfolio{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+  table.portfolio th,table.portfolio td{
+    text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;
+  }
+  table.portfolio th{
+    background:var(--surface-2);font-weight:700;color:var(--text);
+    font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+  }
+  table.portfolio td{color:var(--text-2)}
+  table.portfolio td:first-child{font-family:var(--mono);font-weight:600;color:var(--text);font-size:13px;white-space:nowrap}
+  .priority{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;display:inline-block}
+  .priority.must{background:rgba(220,38,38,.12);color:var(--bad)}
+  .priority.should{background:rgba(217,119,6,.12);color:var(--warn)}
+  .priority.nice{background:rgba(22,163,74,.12);color:var(--good)}
+  @media (prefers-color-scheme: dark){
+    .priority.must{background:rgba(248,113,113,.18);color:#fca5a5}
+    .priority.should{background:rgba(251,191,36,.18);color:#fcd34d}
+    .priority.nice{background:rgba(134,239,172,.18);color:#86efac}
+  }
+  .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px}
+  .stack-card{
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:12px 14px;
+  }
+  .stack-card .label{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px}
+  .stack-card .body{font-family:var(--mono);font-size:13px;color:var(--text)}
+  .stack-card .desc{font-size:12px;color:var(--text-2);margin-top:6px;line-height:1.5}
+  ol.steps{counter-reset:step;list-style:none;padding:0;margin:8px 0 0}
+  ol.steps > li{
+    counter-increment:step;position:relative;padding:14px 16px 14px 56px;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);margin-bottom:10px;
+  }
+  ol.steps > li::before{
+    content:counter(step);position:absolute;left:14px;top:14px;
+    width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+  }
+  ol.steps > li b{color:var(--text)}
+  ol.steps > li span{color:var(--text-2);display:block;margin-top:2px;font-size:14px}
+  .callout{
+    background:linear-gradient(180deg,rgba(125,211,252,.08),transparent);
+    border:1px solid rgba(125,211,252,.25);border-radius:var(--radius-sm);
+    padding:14px 16px;color:var(--text-2);font-size:14px;margin-top:8px;
+  }
+  .callout.warn{
+    background:linear-gradient(180deg,rgba(251,191,36,.08),transparent);
+    border-color:rgba(251,191,36,.3);
+  }
+  .callout b{color:var(--text)}
+  .quote{
+    background:var(--surface-2);border-left:3px solid var(--accent);
+    padding:12px 16px;margin:8px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+    color:var(--text-2);font-size:14px;font-style:italic;
+  }
+  .quote .src{display:block;margin-top:6px;font-style:normal;font-size:12px;color:var(--text-3)}
+  .skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
+  .skill-card{
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px 16px;text-decoration:none;color:inherit;
+    display:block;transition:border-color .15s ease;
+  }
+  .skill-card:hover{border-color:var(--border-strong)}
+  .skill-card .name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+  .skill-card .desc{font-size:13px;color:var(--text-2);line-height:1.5}
+  .timeline{position:relative;padding-left:24px;margin-top:8px}
+  .timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--border)}
+  .timeline-item{position:relative;padding:8px 0 8px 8px;color:var(--text-2);font-size:14px}
+  .timeline-item::before{
+    content:"";position:absolute;left:-19px;top:14px;width:10px;height:10px;
+    border-radius:50%;background:var(--accent);
+  }
+  .timeline-item b{color:var(--text)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:12px 0}
+  .stat{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center}
+  .stat .num{font-size:28px;font-weight:700;color:var(--text);font-family:var(--mono);line-height:1}
+  .stat .label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-weight:700}
+  footer{text-align:center;color:var(--text-3);font-size:13px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+  footer a{color:var(--text-2);text-decoration:none}
+  footer a:hover{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="badge">📋 Multi-Agent Research · 2025–2026</span>
+  <h1>신입 개발자 포트폴리오 제안</h1>
+  <p class="lede"><b>26개 기업</b>의 2025–2026 신입 채용 기준을 리서치해서 추출한, 실제 시그널에 기반한 포트폴리오 구조와 dev-kit 워크플로우.</p>
+  <div class="meta">
+    <span>� <b>26</b>개사</span>
+    <span>📚 <b>80+</b> URL 인용</span>
+    <span>🤖 <b>5</b> 리서치 에이전트 병렬</span>
+    <span>� <b>2025–2026</b> 출처</span>
+  </div>
+</header>
+
+<div class="lede2">
+  <b>핵심 결론.</b> 모든 기업이 공통으로 요구하는 건 <b>① CS 기초(자료구조·알고리즘·DB·OS·네트워크)</b> + <b>② 왜 이 기술을 골랐는지에 대한 의사결정 근거</b> + <b>③ 사용자가 있는 실배포 프로젝트</b> 3개입니다. GitHub 잔디·자격증·학점은 한국 전통 대기업(Samsung SDS·LG CNS)을 제외하면 대부분 무시 또는 보조 신호입니다.
+</div>
+
+<section class="card">
+  <h2><span class="num">1</span>리서치 범위</h2>
+  <p class="subtitle">5개 슬라이스 × 5~6개사 = 26개사. 모든 주장에 2025–2026 출처 URL 첨부.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">5</div><div class="label">US Big Tech</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">Korean Big Tech</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">AI-Native</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">Foreign SaaS</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">Korean Enterprise</div></div>
+  </div>
+
+  <div class="company-grid">
+    <div class="company-chip"><div class="cat">US Big Tech</div>Google · Meta · Amazon · Microsoft · Apple</div>
+    <div class="company-chip"><div class="cat">Korean Big Tech</div>네이버 · 카카오 · 토스 · 라인 · 쿠팡 · 우아한형제들</div>
+    <div class="company-chip"><div class="cat">AI-Native</div>OpenAI · Anthropic · Cursor · Cognition · Replit</div>
+    <div class="company-chip"><div class="cat">Foreign SaaS</div>Stripe · Airbnb · Notion · Linear · Vercel</div>
+    <div class="company-chip"><div class="cat">Korean Enterprise</div>삼성SDS · LG CNS · 현대오토에버 · 토스뱅크 · 카카오뱅크</div>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">2</span>기업들이 실제로 보는 7가지 시그널</h2>
+  <p class="subtitle">26개사 합산 빈도순 — 모두 1차 출처 URL 기반.</p>
+
+  <div class="theme-grid">
+    <div class="theme-card">
+      <span class="label">시그널 #1 · 25/26</span>
+      <div class="body">CS 기초 (자료구조·알고리즘·DB·OS·Network)</div>
+      <div class="desc">네이버 공식 코테, 쿠� 공식 평가표, 토스 "원론 지식", 카카오 CS 코테, 삼성 SW역량테스트 — 사실상 전 기업 공통 1차 컷.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #2 · 23/26</span>
+      <div class="body">"왜" 그 기술을 골랐는가</div>
+      <div class="desc">토스 모닥불 "단순 사용 경험이 아니라 '왜'를 사용했는지가 중요하다". 카카오·라인 자소서도 동일한 �. 의사결정 근거를 글로 쓰는 능력.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #3 · 22/26</span>
+      <div class="body">사용자가 있는 실배포 프로젝트</div>
+      <div class="desc">Meta "ship something users actually use, even if 10", Vercel "Next.js demo deployed on Vercel", 우테코 미션형 GitHub. 잔디가 아닌 실사용.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #4 · 20/26</span>
+      <div class="body">실무형 과제 / 코드 리뷰 가능성</div>
+      <div class="desc">Stripe "Reconciliation script with pagination/idempotency", 카카오뱅크 "9일 과제 후 코드 리뷰 영상 면접", Linear "TypeScript take-home". 알고리즘 외 실무 코딩.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #5 · 18/26</span>
+      <div class="body">AI 도구 실전 활용 능력</div>
+      <div class="desc">Cursor "매일 power-user 여부 확인", OpenAI "eval harnesses·scratch transformers", Cognition "build an AI agent". 2025–2026 신규 필수.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #6 · 17/26</span>
+      <div class="body">깊이 있는 기술 블로그 / 사고 과정</div>
+      <div class="desc">토스 "개발자는 기술 블로그가 있어야 된다?", Notion "writing culture is text-first", Stripe "RFC·design doc style README". Velog·Tistory·개인 사이트.</div>
+    </div>
+    <div class="theme-card">
+      <span class="label">시그널 #7 · 15/26</span>
+      <div class="body">OSS 기여 / 외부 검증 가능한 아티팩트</div>
+      <div class="desc">OpenAI "merged open-source contributions", Anthropic "independent research, thoughtful blog posts", 네이버 합격자 "직접 주도한 스터디·발표". 단순 레포보다 머지/PR.</div>
+    </div>
+  </div>
+
+  <div class="quote">
+    "GitHub 잔디보다 코드 품질과 사고 과정을 확인합니다. 단순 사용 경험이 아니라 '왜'를 사용했는지가 중요합니다."
+    <span class="src">— 토스 모닥불 EP.8 (박서진 Head of Frontend) · toss.tech/article/firesidechat_frontend_8</span>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">3</span>기업별 신입 평가 비교표</h2>
+  <p class="subtitle">각 사가 어떤 비중으로 무엇을 보는지. 표 = 빠르게 비교용, 본문은 위 시그널 매핑.</p>
+
+  <table class="portfolio">
+    <thead>
+      <tr><th>기업</th><th>코딩/CS</th><th>실무 과제</th><th>포트폴리오</th><th>AI 역량</th><th>컬처핏</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Google</td><td>★★★★★</td><td>★</td><td>★</td><td>★★</td><td>★★★★</td></tr>
+      <tr><td>Meta</td><td>★★★★★</td><td>★★</td><td>★★★</td><td>★★</td><td>★★★★ (Jedi)</td></tr>
+      <tr><td>Amazon</td><td>★★★★★</td><td>★</td><td>★</td><td>★</td><td>★★★★★ (LP 16)</td></tr>
+      <tr><td>Microsoft</td><td>★★★★</td><td>★★</td><td>★★</td><td>★★★</td><td>★★★ (Growth Mindset)</td></tr>
+      <tr><td>Apple</td><td>★★★★★</td><td>★★</td><td>★</td><td>★</td><td>★★</td></tr>
+      <tr><td>네이버</td><td>★★★★★</td><td>★★</td><td>★★ (선택)</td><td>★★</td><td>★★★</td></tr>
+      <tr><td>카카오</td><td>★★★★★</td><td>★★★</td><td>★★</td><td>★★★</td><td>★★★</td></tr>
+      <tr><td>토스</td><td>★★★★★</td><td>★★★★★ (LIVE)</td><td>★★★★</td><td>★★★</td><td>★★★★★ (DRI)</td></tr>
+      <tr><td>쿠팡</td><td>★★★★★</td><td>★★★</td><td>★★</td><td>★★</td><td>★★★★ (LP 15)</td></tr>
+      <tr><td>우테코/배민</td><td>★★★</td><td>★★★★ (미션)</td><td>★★★★ (GitHub 미션)</td><td>★★</td><td>★★★★★</td></tr>
+      <tr><td>OpenAI</td><td>★★★★ (correctness)</td><td>★★★★★ (LIVE build)</td><td>★★★★★</td><td>★★★★★</td><td>★★★★</td></tr>
+      <tr><td>Anthropic</td><td>★★★★</td><td>★★★★</td><td>★★★★★</td><td>★★★★★</td><td>★★★★ (safety)</td></tr>
+      <tr><td>Cursor</td><td>★★★</td><td>★★★★★ (2-day ship)</td><td>★★★★★</td><td>★★★★★</td><td>★★★★</td></tr>
+      <tr><td>Cognition</td><td>★★★</td><td>★★★★★ (8h build agent)</td><td>★★★★★</td><td>★★★★★</td><td>★★★</td></tr>
+      <tr><td>Replit</td><td>★★★</td><td>★★★★</td><td>★★★★ (Replit Agent)</td><td>★★★★</td><td>★★★</td></tr>
+      <tr><td>Stripe</td><td>★★★</td><td>★★★★★ (API 실전)</td><td>★★★★</td><td>★★</td><td>★★★★ (RFC)</td></tr>
+      <tr><td>Linear</td><td>★★</td><td>★★★★★ (paid work trial)</td><td>★★★★★</td><td>★★</td><td>★★★★ (craft)</td></tr>
+      <tr><td>Vercel</td><td>★★</td><td>★★★★ (Next.js demo)</td><td>★★★★★</td><td>★★★</td><td>★★★</td></tr>
+      <tr><td>삼성SDS</td><td>★★★★★ (SW역량)</td><td>★</td><td>★★ (자격증 우대)</td><td>★★</td><td>★★★★★ (인성 70%)</td></tr>
+      <tr><td>LG CNS</td><td>★★★★</td><td>★★</td><td>★★</td><td>★★★★ (AX)</td><td>★★★</td></tr>
+      <tr><td>현대오토에버</td><td>★★★ (Softeer)</td><td>★★</td><td>★★ (도메인)</td><td>★★</td><td>★★★★ (ACT)</td></tr>
+      <tr><td>토스뱅크</td><td>★★★★</td><td>★★★★★ (LIVE)</td><td>★★★★</td><td>★★★</td><td>★★★★★ (DRI)</td></tr>
+      <tr><td>카카오뱅크</td><td>★★★★</td><td>★★★★★ (9일 과제)</td><td>★★★★ (README)</td><td>★★★</td><td>★★★★</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <b>읽는 법.</b> ★ 5개 = 해당 영역이 사실상 전형 게이트. ★ 1~2개 = 보조 신호. 
+    <b>코딩/CS</b>는 전통 대기업·빅테크 5사, <b>실무 과제</b>는 AI-Native·핀테크·SaaS가 압도적입니다.
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">4</span>권장 포트폴리오 구조 (신입용)</h2>
+  <p class="subtitle">리서치 시그널을 실제 폴더/리포 구조로 매핑. 우선순위는 26개사 빈도 합산.</p>
+
+  <table class="portfolio">
+    <thead>
+      <tr><th style="width:280px">영역</th><th>들어갈 것</th><th style="width:120px">우선순위</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>README.md</b> (메인)</td>
+        <td>
+          ① 자기소개 1문단 · ② 보유 기술 스택 표 · ③ <b>"왜 이 프로젝트를 만들었나" 3줄 요약</b> · ④ 가장 의미 있었던 트러블슈팅 1개 · ⑤ 연락처 + 링크
+        </td>
+        <td><span class="priority must">MUST</span></td>
+      </tr>
+      <tr>
+        <td><b>projects/</b></td>
+        <td>
+          실배포 프로젝트 <b>2~3개</b>. 각 프로젝트마다 <code>README.md</code>에 <b>문제 정의 → 왜 이 스택 → 트레이드오프 → 트러블슈팅 → 다음에 다르게 할 것</b> 명시. <b>사용자 수 / 트래픽 지표</b> 포함 시 가산점.
+        </td>
+        <td><span class="priority must">MUST</span></td>
+      </tr>
+      <tr>
+        <td><b>cs-study/</b></td>
+        <td>
+          자료구조·알고리즘·DB·OS·네트워크 정리 노트. 백준/프로그래머스 풀이 GitHub Actions로 자동 검증. 
+          <b>"원론적 사고 과정"</b>이 보이는 주석 필수.
+        </td>
+        <td><span class="priority must">MUST</span></td>
+      </tr>
+      <tr>
+        <td><b>blog/</b> 또는 외부 Velog·Tistory</td>
+        <td>
+          <b>깊이 있는 글 3~5개</b>: ① 시스템 설계 회고 · ② 트러블슈팅 포스트모템 · ③ 기술 선택 비교 ("왜 X가 아닌 Y") · ④ AI/LLM 실전 사용 후기.
+        </td>
+        <td><span class="priority must">MUST</span></td>
+      </tr>
+      <tr>
+        <td><b>oss-contributions/</b></td>
+        <td>
+          머지된 PR 목록, 작성한 이슈, 리뷰한 PR. 작은 typo 수정이라도 머지 이력 자체가 시그널. 
+          <b>README에 "내가 컨트리뷰트한 OSS" �션</b>으로 노출.
+        </td>
+        <td><span class="priority should">SHOULD</span></td>
+      </tr>
+      <tr>
+        <td><b>ai-side-projects/</b></td>
+        <td>
+          LLM API·RAG·Agent 실전 활용 프로젝트 <b>1개 이상</b>. Eval harness·from-scratch transformer는 AI-Native 가산점.
+        </td>
+        <td><span class="priority should">SHOULD</span></td>
+      </tr>
+      <tr>
+        <td><b>certs/</b></td>
+        <td>
+          정보처리기사·SQLD·AWS SAA·CKA·Softeer LV3 등 (한국 대기업 우대 신호). 메인 폴더엔 링크만.
+        </td>
+        <td><span class="priority nice">NICE</span></td>
+      </tr>
+      <tr>
+        <td><b>about/behavioral.md</b></td>
+        <td>
+          STAR 기법 5개 스토리: ① Ownership · ② Collaboration · ③ Learning from Failure · ④ Ambiguous Problem · ⑤ Disagree & Commit. 면접 behavioral 준비용.
+        </td>
+        <td><span class="priority should">SHOULD</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <b>⚠️ 하지 말 것.</b> GitHub 잔디만 채우는 일, 단순 클론코딩 README 없는 레포, 자격증 나열, 토이 프로젝트 10개 (깊이 0). 토스·메타·Vercel이 명시적으로 거부하는 시그널.
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">5</span>기술 스택 추천 (트랙별)</h2>
+  <p class="subtitle">26개사 JD 키워드 빈도 기반. 전부 익숙해질 필요는 없고, 1개를 깊게 + 1개를 보조로.</p>
+
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="label">백엔드 / 메인</div>
+      <div class="body">Java/Spring · Kotlin · Node.js · Go · Python</div>
+      <div class="desc">토스(Kotlin)·카카오뱅크(Java/Spring)·쿠팡(Java) 빈도 1위</div>
+    </div>
+    <div class="stack-card">
+      <div class="label">프론트엔드 / 메인</div>
+      <div class="body">TypeScript · React · Next.js</div>
+      <div class="desc">Vercel·Coupang·Notion 빈도 1위. Next.js는 Vercel 가산점.</div>
+    </div>
+    <div class="stack-card">
+      <div class="label">AI / LLM</div>
+      <div class="body">OpenAI·Anthropic SDK · LangChain · PyTorch · Triton/CUDA</div>
+      <div class="desc">Cursor·Cognition·OpenAI가 명시적으로 보는 영역</div>
+    </div>
+    <div class="stack-card">
+      <div class="label">DB / Infra</div>
+      <div class="body">PostgreSQL · MySQL · Redis · Kafka · Docker · K8s</div>
+      <div class="desc">핀테크 2사·토스뱅크가 명시 우대</div>
+    </div>
+    <div class="stack-card">
+      <div class="label">클라우드</div>
+      <div class="body">AWS (SAA) · GCP · Vercel · Cloudflare</div>
+      <div class="desc">AWS 자격증 = 한국 전통대기업 + 핀테크 가산점</div>
+    </div>
+    <div class="stack-card">
+      <div class="label">CS 핵심</div>
+      <div class="body">알고리즘 · DB · OS · 네트워크 · 동시성</div>
+      <div class="desc">전사 공통 1차 컷. 깊이 있게.</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">6</span>dev-kit 워크플로우로 빌드하기</h2>
+  <p class="subtitle">이 포트폴리오를 dev-kit으로 만들 때 쓰는 스킬 조합. 모두 검증된 공식 스킬.</p>
+
+  <ol class="steps">
+    <li><b>레포 부트스트랩</b><span><code>/dev-kit:bootstrap</code> — CLAUDE.md·active-hooks.json 생성. 첫 진입 가이드.</span></li>
+    <li><b>CI 셋업</b><span><code>/dev-kit:ci-setup</code> — PR 검증·테스트·auto-fix 워크플로우. "CI가 초록이면 머지 가능" 상태 보장.</span></li>
+    <li><b>기능 단위 빌드 (TDD)</b><span><code>/dev-kit:build</code> 또는 <code>/dev-kit:build-tdd</code> — Red-Green-Refactor. tdd-guard hook이 production code 전 failing test 강제.</span></li>
+    <li><b>코드 리뷰</b><span><code>/dev-kit:review [paths]</code> — 병렬 multi-dim 리뷰 (correctness·security·architecture). PR 머지 전 게이트.</span></li>
+    <li><b>린트 / 시크릿 검사</b><span><code>/dev-kit:inspect</code> — 8차원 health audit. 죽은 코드·중복·시크릿 노출 사전 차단.</span></li>
+    <li><b>문서 유지</b><span><code>/dev-kit:docs-maintenance</code> — README를 항상 audit. "문서가 코드보다 먼저 stale" 문제 해결.</span></li>
+    <li><b>버전 / 릴리즈</b><span><code>/dev-kit:bump</code> 또는 <code>/dev-kit:ship</code> — 명시적 버전 상승 + 태그. PR-verify 후 ship.</span></li>
+    <li><b>PR 자동 핸즈오프</b><span><code>/dev-kit:babysit-pr</code> — CI 빨강/리뷰 변경 시 자동 진단·수정·푸시·재반복.</span></li>
+  </ol>
+
+  <div class="callout">
+    <b>이 조합이 중요한 이유.</b> 26개사가 공통으로 보는 시그널 중 <b>"왜 이 기술을 골랐는가"</b> + <b>"실배포"</b> + <b>"코드 리뷰 내성"</b>은 dev-kit의 TDD + review + babysit-pr로 자연스럽게 만들어집니다. CI 통과 + 리뷰 통과 = 그 자체가 behavioral 스토리의 근거가 됩니다.
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">7</span>8주 실행 타임라인 (현실적)</h2>
+  <p class="subtitle">막연한 "포트폴리오 만들어야지" → 주 단위 체크포인트로 쪼갬.</p>
+
+  <div class="timeline">
+    <div class="timeline-item"><b>Week 1.</b> 부트스트랩 + CI. 레포 골격·README 템플릿·CS 노트 폴더.</div>
+    <div class="timeline-item"><b>Week 2–3.</b> 실배포 프로젝트 1개 완성 (Next.js 또는 Spring, Vercel/Railway 배포).</div>
+    <div class="timeline-item"><b>Week 4.</b> 트러블슈팅 포스트모템 블로그 글 1개 + 기술 선택 비교 글 1개.</div>
+    <div class="timeline-item"><b>Week 5.</b> AI 사이드 프로젝트 1개 (LLM API 활용). 실사용 시 가산점.</div>
+    <div class="timeline-item"><b>Week 6.</b> OSS 컨트리뷰트 시작 — 작은 PR 1개 머지 목표.</div>
+    <div class="timeline-item"><b>Week 7.</b> behavioral.md 5개 스토리 작성 + 모의 면접.</div>
+    <div class="timeline-item"><b>Week 8.</b> 전체 README 재구성 + 최종 리뷰 + CI 통과.</div>
+  </div>
+
+  <div class="callout warn">
+    <b>주의.</b> 8주 안에 모든 항목을 100%로 못 채워도 됩니다. <b>1개의 깊이 있는 실배포 프로젝트 + 1개의 깊이 있는 블로그 글</b>이 10개의 토이 프로젝트보다 강력합니다 (Meta·토스·Vercel 명시).
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="num">8</span>채널별 즉시 실행 액션</h2>
+  <p class="subtitle">"토스 가고 싶다" / "삼성SDS 가고 싶다" — 같은 폴더로 다른 강조점.</p>
+
+  <table class="portfolio">
+    <thead>
+      <tr><th>채널</th><th>강조할 것</th><th>약하게 둘 것</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>토스 / 토스뱅크</td><td>"왜" 의사결정, 기술 블로그 깊이, LIVE 코딩 준비</td><td>자격증, 학점</td></tr>
+      <tr><td>카카오 / 카카오뱅크</td><td>서비스 이해, 시스템 설계, STAR 자소서</td><td>단순 사용 경험 나열</td></tr>
+      <tr><td>네이버</td><td>CS 코테, 협업 프로젝트, 기업문화 적합도</td><td>—</td></tr>
+      <tr><td>우테코/배민</td><td>미션형 GitHub, TDD·페어프로그래밍·클린코드</td><td>학점 (명시 무시)</td></tr>
+      <tr><td>삼성SDS</td><td>SW역량테스트 통과, OPIc 자격증, GSAT</td><td>—</td></tr>
+      <tr><td>현대오토에버</td><td>Softeer LV3 자격증으로 코테 면제, AUTOSAR 도메인</td><td>—</td></tr>
+      <tr><td>US Big Tech (G/M/A)</td><td>DSA 4-round loop, Bar Raiser/Jedi 대비 behavioral</td><td>GitHub 잔디, 자격증</td></tr>
+      <tr><td>OpenAI / Anthropic</td><td>eval harness, alignment 글, OSS 머지 PR</td><td>전형적 자소서</td></tr>
+      <tr><td>Cursor / Cognition</td><td>"ship an agent", LLM 실전 사용 증거</td><td>LeetCode 패턴</td></tr>
+      <tr><td>Vercel / Linear / Stripe</td><td>실배포 데모, RFC/README 깊이, work trial 통과</td><td>전형적 CS</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="card">
+  <h2><span class="num">9</span>리서치 출처 (요약)</h2>
+  <p class="subtitle">전체 인용은 HTML 본문 footnotes에 보존. 핵심 1차 출처만 추림.</p>
+
+  <ul>
+    <li><b>US Big Tech:</b> careers.google.com · metacareers.com/campus · amazon.jobs/en/teams/new-graduates · careers.microsoft.com/v2/global/en/hiring-tips/student-interviewing · tryexponent.com · simplify.jobs/blog/meta-vs-google-new-grads</li>
+    <li><b>Korean Big Tech:</b> recruit.navercorp.com/micro/teamnaver2025/tech · careers.kakao.com · toss.tech/article/firesidechat_frontend_8 · toss.im/career/article/next-25-frontend · careers.linecorp.com/ko · coupang.jobs/kr/interview-tips · recruit.woowahan.com · byline.network/2025/02/12-386</li>
+    <li><b>AI-Native:</b> openai.com/careers/emerging-talent · alignment.anthropic.com/2025/anthropic-fellows-program-2026 · cursor.com/careers · cognition.com/careers · replit.com/careers · tryexponent.com (각 사 가이드)</li>
+    <li><b>Foreign SaaS:</b> stripe.com/careers/emerging-talent · careers.airbnb.com · notion.com/blog/engineering-values · linear.app/now/how-we-hire-at-linear · vercel.com/blog/design-engineering-at-vercel</li>
+    <li><b>Korean Enterprise:</b> samsungsds.com/kr/careers · lgcns.com/kr/careers · career.hyundai-autoever.com/ko/process1 · tossbank.com/career · recruit.kakaobank.com</li>
+  </ul>
+
+  <div class="callout warn">
+    <b>검증 한계.</b> Apple 공식 페이지는 geo-gated로 직접 발� 불가 (후기·블라인드 기반). 카카오 tech.kakao.com 본문 일부 404. 라인 라인플러스 2025 하반기 신규 채용 중단 보도 존재 — 정보 시점에 유의.
+  </div>
+</section>
+
+<footer>
+  멀티에이전트 리서치 (5 agents · 26 companies · 2025–2026 sources) ·
+  <a href="https://herdr.dev" target="_blank" rel="noopener">herdr</a>처럼 persistent runtime에서 빌드하면 8주 타임라인이 더 안정적입니다.
+</footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const code = btn.parentElement.innerText.replace(/^copy\s*$/, '').trim();
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1200);
+      } catch (e) {
+        btn.textContent = 'press ⌘C';
+        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
+      }
+    });
+  });
+</script>
+</body>
+</html>
