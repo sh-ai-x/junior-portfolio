@@ -2,7 +2,7 @@
 
 > Single Source of Truth for the MSA order service.
 > **Stack note**: User decided to drop Spring from the original README plan; current target is **Python 3.12+ + FastAPI + async SQLAlchemy + Redis**. Kotlin/Spring path is preserved as fallback if the swap is reversed.
-> session_id: `p2-msa-order` · date: 2026-08-10
+> session_id: `p2-msa-order` · date: 2026-08-11
 
 ## 1. project_context — AUTO-DERIVED
 

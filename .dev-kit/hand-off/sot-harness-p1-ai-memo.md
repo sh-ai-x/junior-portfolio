@@ -1,7 +1,7 @@
 # SOT Harness — `01-ai-memo`
 
 > Single Source of Truth for the AI-powered memo app (Next.js 15 + pgvector + OpenAI).
-> Generated via `/dev-kit:sot-harness-writer`. session_id: `p1-ai-memo` · date: 2026-08-10
+> Generated via `/dev-kit:sot-harness-writer`. session_id: `p1-ai-memo` · date: 2026-08-11
 
 ## 1. project_context — LOCKED
 

@@ -3,7 +3,7 @@
 > Single Source of Truth for the CLI tool project (first OSS PR merge target).
 > **Stack**: Go 1.22+ (default) or Rust (fallback); framework: cobra (Go) or clap (Rust).
 > **Project choice** (A/B/C/D from README) is **OPEN** — TBD.
-> session_id: `p4-cli-tool` · date: 2026-08-10
+> session_id: `p4-cli-tool` · date: 2026-08-11
 
 ## 1. project_context — AUTO-DERIVED
 

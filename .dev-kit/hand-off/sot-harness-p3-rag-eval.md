@@ -1,7 +1,7 @@
 # SOT Harness — `03-rag-eval`
 
 > Single Source of Truth for the RAG + Eval Harness project (Python 3.11+ + FastAPI + LangChain + pgvector + Ragas).
-> session_id: `p3-rag-eval` · date: 2026-08-10
+> session_id: `p3-rag-eval` · date: 2026-08-11
 
 ## 1. project_context — AUTO-DERIVED
 
