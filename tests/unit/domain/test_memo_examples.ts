@@ -166,16 +166,26 @@ describe("cosineSimilarity", () => {
 
 describe("rankBySimilarity / topK", () => {
   it("sorts memos by descending similarity", () => {
-    const m1 = createMemo({ title: "A", body: "a", embedding: createEmbedding(vec(1)) });
-    const m2 = createMemo({ title: "B", body: "b", embedding: createEmbedding(vec(0.5)) });
+    // Vectors with strictly distinct cosine similarities to the query,
+    // so the sort is deterministic regardless of IEEE-754 rounding.
+    // query = all 1s; m1 = aligned (cos=1); m2 = orthogonal-ish (cos~0);
+    // m3 = anti-aligned (cos~-1).
+    const query = createEmbedding(vec(1));
+    const m1 = createMemo({ title: "A", body: "a", embedding: query });  // identical → cos = 1
+    const m2 = createMemo({
+      title: "B",
+      body: "b",
+      embedding: createEmbedding(vec(0).map((_, i) => (i % 2 === 0 ? 1 : -1)))
+    });  // alternating ±1, dot with all-1s = 0 → cos = 0
     const m3 = createMemo({
       title: "C",
       body: "c",
-      embedding: createEmbedding(vec(0).map((_, i) => -1 + i / MODEL_DIM))
-    });
-    const query = createEmbedding(vec(1));
+      embedding: createEmbedding(vec(-1))
+    });  // anti-aligned → cos = -1
     const ranked = rankBySimilarity(query, [m3, m1, m2]);
     expect(ranked[0]!.memo.id).toBe(m1.id);
+    expect(ranked[1]!.memo.id).toBe(m2.id);
+    expect(ranked[2]!.memo.id).toBe(m3.id);
   });
 
   it("memos without an embedding sort to the end", () => {

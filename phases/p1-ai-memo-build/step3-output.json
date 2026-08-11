@@ -13,9 +13,11 @@
     "vitest_unit_and_ports": {
       "command": "vitest run tests/unit/ tests/ports/",
       "exit_code": 0,
-      "tests_total": 96,
-      "tests_passed": 96,
-      "tests_failed": 0
+      "tests_total": 69,
+      "tests_passed": 69,
+      "tests_failed": 0,
+      "integration_tests_skipped": 2,
+      "note": "5 consecutive runs all green; flakiness fixed by replacing scalar-multiple cosine ties with strictly distinct vectors."
     },
     "integration_tests": {
       "openai_tagger": {
