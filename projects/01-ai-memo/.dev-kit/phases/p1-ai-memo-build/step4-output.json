@@ -1,0 +1,49 @@
+{
+  "step": 4,
+  "name": "http-layer",
+  "status": "completed",
+  "completed_at": "2026-08-11T14:51:20Z",
+  "duration_seconds": 24,
+  "verification": {
+    "vitest": {
+      "command": "vitest run",
+      "exit_code": 0,
+      "tests_total": 82,
+      "tests_passed": 80,
+      "tests_failed": 0,
+      "tests_skipped": 2,
+      "test_files_total": 9,
+      "test_files_passed": 7
+    },
+    "tsc": {
+      "command": "tsc --noEmit",
+      "exit_code": 0,
+      "errors": 0
+    },
+    "next_build": {
+      "command": "next build",
+      "exit_code": 0,
+      "routes_built": 7,
+      "static_pages_generated": 7
+    }
+  },
+  "files_created": [
+    "src/lib/auth.ts",
+    "src/lib/container.ts",
+    "src/lib/memo-service.ts",
+    "src/app/layout.tsx",
+    "src/app/page.tsx",
+    "src/app/globals.css",
+    "src/app/memos/page.tsx",
+    "src/app/memos/new/page.tsx",
+    "src/app/memos/[id]/page.tsx",
+    "src/app/search/page.tsx",
+    "src/app/api/memos/route.ts",
+    "src/app/api/search/route.ts",
+    "src/app/api/auth/[...nextauth]/route.ts",
+    "next.config.mjs",
+    "next-env.d.ts",
+    "tailwind.config.ts",
+    "postcss.config.mjs"
+  ]
+}

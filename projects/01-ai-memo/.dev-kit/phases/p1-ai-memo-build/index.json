@@ -1,0 +1,105 @@
+{
+  "phase": "p1-ai-memo-build",
+  "session": "feat-p1-ai-memo-build",
+  "worktree": "feat/p1-ai-memo-build",
+  "branch_base": "feat/p1-ai-memo-build",
+  "status": "active",
+  "created_at": "2026-08-11",
+  "source_sot": "../../../../.dev-kit/hand-off/sot-harness-p1-ai-memo.md",
+  "source_interview": "../hand-off/interview-feat-p1-ai-memo-build.md",
+  "steps": [
+    {
+      "n": 1,
+      "name": "domain-core",
+      "title": "Domain core \u2014 Memo/Tag/Embedding types + property tests",
+      "status": "completed",
+      "writes": [
+        "src/domain/"
+      ],
+      "depends_on": [],
+      "completed_at": "2026-08-11T14:13:00Z",
+      "commit": "e10665d",
+      "chore_status": "output-recorded"
+    },
+    {
+      "n": 2,
+      "name": "ports",
+      "title": "Ports \u2014 TaggerPort/EmbedderPort/RepoPort + contracts",
+      "status": "completed",
+      "writes": [
+        "src/ports/"
+      ],
+      "depends_on": [
+        1
+      ],
+      "completed_at": "2026-08-11T14:13:50Z",
+      "commit": "ff3333f",
+      "chore_status": "output-recorded"
+    },
+    {
+      "n": 3,
+      "name": "adapters",
+      "title": "Adapters \u2014 OpenAI impls + pgvector repo (real)",
+      "status": "completed",
+      "writes": [
+        "src/adapters/"
+      ],
+      "depends_on": [
+        2
+      ],
+      "completed_at": "2026-08-11T14:18:00Z",
+      "commit": "1c075e0",
+      "chore_status": "output-recorded"
+    },
+    {
+      "n": 4,
+      "name": "http-layer",
+      "title": "HTTP \u2014 App Router routes + RSC + NextAuth",
+      "status": "completed",
+      "writes": [
+        "src/app/"
+      ],
+      "depends_on": [
+        3
+      ],
+      "completed_at": "2026-08-11T14:51:20Z",
+      "commit": "e94a77b",
+      "chore_status": "output-recorded"
+    },
+    {
+      "n": 5,
+      "name": "ui",
+      "title": "UI \u2014 Memo list/editor/search pages",
+      "status": "completed",
+      "writes": [
+        "src/components/"
+      ],
+      "depends_on": [
+        4
+      ],
+      "completed_at": "2026-08-11T14:51:20Z",
+      "commit": "4f6a03a",
+      "chore_status": "output-recorded"
+    },
+    {
+      "n": 6,
+      "name": "deploy",
+      "title": "Deploy \u2014 Vercel env config + prod smoke",
+      "status": "completed",
+      "writes": [
+        "vercel.json",
+        ".env.production"
+      ],
+      "depends_on": [
+        5
+      ],
+      "completed_at": "2026-08-11T14:55:00Z",
+      "commit": "933c887",
+      "chore_status": "output-recorded"
+    }
+  ],
+  "dispatch": {
+    "mode": "sequential",
+    "reason": "each step depends_on the previous (data model before API before UI)"
+  }
+}
