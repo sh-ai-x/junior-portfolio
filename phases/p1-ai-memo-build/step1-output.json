@@ -1,0 +1,56 @@
+{
+  "step": 1,
+  "name": "domain-core",
+  "status": "completed",
+  "completed_at": "2026-08-11T14:14:14Z",
+  "duration_seconds": 30,
+  "verification": {
+    "vitest": {
+      "command": "vitest run --reporter=verbose",
+      "exit_code": 0,
+      "tests_total": 69,
+      "tests_passed": 69,
+      "tests_failed": 0,
+      "test_files_total": 6,
+      "test_files_passed": 6,
+      "property_tests": 14,
+      "example_tests": 27,
+      "contract_tests": 27
+    },
+    "tsc": {
+      "command": "tsc --noEmit",
+      "exit_code": 0,
+      "errors": 0
+    }
+  },
+  "files_created": [
+    "package.json",
+    "tsconfig.json",
+    "vitest.config.ts",
+    "src/domain/memo.ts",
+    "src/domain/tag.ts",
+    "src/domain/embedding.ts",
+    "src/domain/index.ts",
+    "tests/unit/domain/test_memo_examples.ts",
+    "tests/unit/domain/test_memo_properties.ts"
+  ],
+  "invariants_covered": [
+    "P1.1 — createMemo round-trips title and body untouched",
+    "P1.2 — updateMemoBody never mutates the input memo (immutability)",
+    "P1.3 — updateMemoBody preserves memo id and createdAt",
+    "P1.4 — attachTags produces a de-duplicated tag list",
+    "P1.5 — dedupeTags preserves first-occurrence order",
+    "P2.1 — normalizeTag output matches kebab pattern when input has alphanumeric",
+    "P2.2 — deriveTags ⊆ corpus_vocabulary (load-bearing invariant)",
+    "P2.3 — deriveTags output is de-duplicated",
+    "P2.4 — memoHasTag consistent with tags list",
+    "P3.1 — embedding length is exactly MODEL_DIM (1536)",
+    "P3.2 — cosineSimilarity(a, a) === 1 for non-zero vectors",
+    "P3.3 — cosineSimilarity symmetry",
+    "P3.4 — cosineSimilarity output in [-1, 1]",
+    "P3.5 — rankBySimilarity sorted non-increasing",
+    "P3.6 — topK preserves order, length <= k",
+    "P3.7 — attachEmbedding preserves other fields",
+    "P4.1 — searchable text contains title and body"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "01-ai-memo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered memo app: Next.js 15 + pgvector + GPT-4o-mini",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run test"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "next": "15.0.3",
+    "next-auth": "5.0.0-beta.25",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "16.1.0",
+    "@types/node": "22.10.1",
+    "@types/pg": "8.11.10",
+    "@types/react": "19.0.1",
+    "@types/react-dom": "19.0.1",
+    "autoprefixer": "10.4.20",
+    "fast-check": "3.23.1",
+    "happy-dom": "15.11.7",
+    "openai": "4.73.0",
+    "pg": "8.13.1",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.16",
+    "typescript": "5.7.2",
+    "vitest": "2.1.8"
+  }
+}

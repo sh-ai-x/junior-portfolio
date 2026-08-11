@@ -1,0 +1,44 @@
+{
+  "step": 3,
+  "name": "adapters",
+  "status": "completed",
+  "completed_at": "2026-08-11T14:18:00Z",
+  "duration_seconds": 30,
+  "verification": {
+    "tsc": {
+      "command": "tsc --noEmit",
+      "exit_code": 0,
+      "errors": 0
+    },
+    "vitest_unit_and_ports": {
+      "command": "vitest run tests/unit/ tests/ports/",
+      "exit_code": 0,
+      "tests_total": 69,
+      "tests_passed": 69,
+      "tests_failed": 0,
+      "integration_tests_skipped": 2,
+      "note": "5 consecutive runs all green; flakiness fixed by replacing scalar-multiple cosine ties with strictly distinct vectors."
+    },
+    "integration_tests": {
+      "openai_tagger": {
+        "command": "vitest run tests/adapters/test_openai_tagger_integration.ts",
+        "skipped": true,
+        "reason": "OPENAI_API_KEY not set in CI sandbox"
+      },
+      "pgvector_repo": {
+        "command": "vitest run tests/adapters/test_pgvector_integration.ts",
+        "skipped": true,
+        "reason": "PG_DSN not set in CI sandbox"
+      }
+    }
+  },
+  "files_created": [
+    "src/adapters/openai-tagger.ts",
+    "src/adapters/openai-embedder.ts",
+    "src/adapters/pgvector-repo.ts",
+    "src/adapters/index.ts",
+    "tests/adapters/test_openai_tagger_integration.ts",
+    "tests/adapters/test_pgvector_integration.ts"
+  ],
+  "notes": "Real adapters (OpenAI + pgvector) implemented and gated on env vars. Fakes from step 2 already pass the same contract suite verbatim."
+}
