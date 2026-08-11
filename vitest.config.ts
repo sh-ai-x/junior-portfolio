@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vitest/config";
 import path from "node:path";
 
@@ -12,6 +13,10 @@ export default defineConfig({
       "tests/**/test_*.tsx"
     ],
     exclude: ["node_modules", ".next", "dist"]
+  },
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "react"
   },
   resolve: {
     alias: {

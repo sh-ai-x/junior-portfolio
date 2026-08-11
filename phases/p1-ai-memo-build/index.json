@@ -55,13 +55,14 @@
       "n": 4,
       "name": "http-layer",
       "title": "HTTP \u2014 App Router routes + RSC + NextAuth",
-      "status": "pending",
+      "status": "completed",
       "writes": [
         "src/app/"
       ],
       "depends_on": [
         3
-      ]
+      ],
+      "completed_at": "2026-08-11T14:51:20Z"
     },
     {
       "n": 5,
