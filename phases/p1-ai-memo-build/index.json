@@ -77,7 +77,9 @@
       "depends_on": [
         4
       ],
-      "completed_at": "2026-08-11T14:51:20Z"
+      "completed_at": "2026-08-11T14:51:20Z",
+      "commit": "4f6a03a",
+      "chore_status": "output-recorded"
     },
     {
       "n": 6,
@@ -91,7 +93,9 @@
       "depends_on": [
         5
       ],
-      "completed_at": "2026-08-11T14:55:00Z"
+      "completed_at": "2026-08-11T14:55:00Z",
+      "commit": "933c887",
+      "chore_status": "output-recorded"
     }
   ],
   "dispatch": {
