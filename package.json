@@ -1,0 +1,23 @@
+{
+  "name": "01-ai-memo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered memo app: Next.js 15 + pgvector + GPT-4o-mini",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "5.7.2",
+    "@types/node": "22.10.1",
+    "vitest": "2.1.8",
+    "fast-check": "3.23.1"
+  }
+}

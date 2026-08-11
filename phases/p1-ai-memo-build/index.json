@@ -1,0 +1,88 @@
+{
+  "phase": "p1-ai-memo-build",
+  "session": "feat-p1-ai-memo-build",
+  "worktree": "feat/p1-ai-memo-build",
+  "branch_base": "feat/p1-ai-memo-build",
+  "status": "active",
+  "created_at": "2026-08-11",
+  "source_sot": ".dev-kit/hand-off/sot-harness-p1-ai-memo.md",
+  "source_interview": ".dev-kit/hand-off/interview-feat-p1-ai-memo-build.md",
+  "steps": [
+    {
+      "n": 1,
+      "name": "domain-core",
+      "title": "Domain core \u2014 Memo/Tag/Embedding types + property tests",
+      "status": "completed",
+      "writes": [
+        "src/domain/"
+      ],
+      "depends_on": [],
+      "completed_at": "2026-08-11T14:13:00Z"
+    },
+    {
+      "n": 2,
+      "name": "ports",
+      "title": "Ports \u2014 TaggerPort/EmbedderPort/RepoPort + contracts",
+      "status": "pending",
+      "writes": [
+        "src/ports/"
+      ],
+      "depends_on": [
+        1
+      ]
+    },
+    {
+      "n": 3,
+      "name": "adapters",
+      "title": "Adapters \u2014 OpenAI impls + pgvector repo (real)",
+      "status": "pending",
+      "writes": [
+        "src/adapters/"
+      ],
+      "depends_on": [
+        2
+      ]
+    },
+    {
+      "n": 4,
+      "name": "http-layer",
+      "title": "HTTP \u2014 App Router routes + RSC + NextAuth",
+      "status": "pending",
+      "writes": [
+        "src/app/"
+      ],
+      "depends_on": [
+        3
+      ]
+    },
+    {
+      "n": 5,
+      "name": "ui",
+      "title": "UI \u2014 Memo list/editor/search pages",
+      "status": "pending",
+      "writes": [
+        "src/components/"
+      ],
+      "depends_on": [
+        4
+      ]
+    },
+    {
+      "n": 6,
+      "name": "deploy",
+      "title": "Deploy \u2014 Vercel env config + prod smoke",
+      "status": "pending",
+      "writes": [
+        "vercel.json",
+        ".env.production"
+      ],
+      "depends_on": [
+        5
+      ]
+    }
+  ],
+  "dispatch": {
+    "mode": "sequential",
+    "reason": "each step depends_on the previous (data model before API before UI)"
+  }
+}
