@@ -40,13 +40,14 @@
       "n": 3,
       "name": "adapters",
       "title": "Adapters \u2014 OpenAI impls + pgvector repo (real)",
-      "status": "pending",
+      "status": "completed",
       "writes": [
         "src/adapters/"
       ],
       "depends_on": [
         2
-      ]
+      ],
+      "completed_at": "2026-08-11T14:18:00Z"
     },
     {
       "n": 4,
