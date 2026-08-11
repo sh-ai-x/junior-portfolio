@@ -1,0 +1,40 @@
+{
+  "step": 6,
+  "name": "deploy",
+  "status": "completed",
+  "completed_at": "2026-08-11T14:55:00Z",
+  "duration_seconds": 30,
+  "verification": {
+    "vercel_config": {
+      "file": "vercel.json",
+      "framework": "nextjs",
+      "regions": ["iad1"],
+      "env_vars_declared": 6,
+      "exists": true
+    },
+    "smoke_script": {
+      "file": "scripts/smoke-prod.sh",
+      "executable": true,
+      "routes_checked": ["/", "/memos", "/search", "/search?q=foo", "/api/memos"]
+    },
+    "deploy_runbook": {
+      "file": "docs/deploy.md",
+      "exists": true
+    },
+    "migration_script": {
+      "file": "scripts/migrate.sql",
+      "exists": true,
+      "creates_extension": "vector",
+      "creates_table": "public.memos",
+      "creates_indexes": ["memos_owner_idx", "memos_updated_idx", "memos_embedding_idx"]
+    }
+  },
+  "files_created": [
+    "vercel.json",
+    ".env.production.example",
+    "scripts/smoke-prod.sh",
+    "scripts/migrate.sql",
+    "docs/deploy.md"
+  ],
+  "notes": "Per task instructions: configs and smoke script created but not deployed to production (sandbox cannot reach Vercel). Production deploy requires running ./scripts/smoke-prod.sh against the deployed URL once Vercel is connected."
+}

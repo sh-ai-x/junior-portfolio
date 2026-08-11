@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "USE_FAKES": "0",
+    "OPENAI_API_KEY": "@openai-api-key",
+    "NEON_DATABASE_URL": "@neon-database-url",
+    "NEXTAUTH_SECRET": "@nextauth-secret",
+    "GITHUB_CLIENT_ID": "@github-client-id",
+    "GITHUB_CLIENT_SECRET": "@github-client-secret",
+    "EMAIL_FROM": "@email-from"
+  }
+}

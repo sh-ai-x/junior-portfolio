@@ -83,14 +83,15 @@
       "n": 6,
       "name": "deploy",
       "title": "Deploy \u2014 Vercel env config + prod smoke",
-      "status": "pending",
+      "status": "completed",
       "writes": [
         "vercel.json",
         ".env.production"
       ],
       "depends_on": [
         5
-      ]
+      ],
+      "completed_at": "2026-08-11T14:55:00Z"
     }
   ],
   "dispatch": {
