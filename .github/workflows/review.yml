@@ -262,22 +262,6 @@ jobs:
             echo "needs_fallback=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Post fallback verdict comment (review)
-        if: steps.fallback.outputs.needs_fallback == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          {
-            echo "Verdict: Approve"
-            echo
-            echo "LLM review (3-dim) skipped -- workflow validation guard"
-            echo
-            echo 'anthropics/claude-code-action@558b1d6cab4085c7753fe402c10bef0fbb92ac7a # v1 refused to run because this PR modifies one or more files under .github/workflows/. The action enforces identical content with the default branch as a self-protection guard.'
-            echo
-            echo "Action required: manual review of the workflow changes by a maintainer before merge."
-          } | gh pr comment "$PR_NUMBER" --body-file -
-
       - name: Extract review verdict
         id: extract_verdict
         if: always()
@@ -297,7 +281,20 @@ jobs:
             # hard-fail. Report the real state so the gate can surface the
             # bootstrap-PR remediation message.
             echo "agent_ran=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            # Issue #fix-fallback-comment: set bash vars so the rich post-
+            # comment at the bottom of this step fires on the bootstrap-PR
+            # path too (previously this branch exited 0, so the rich comment
+            # only ran on the success / empty-verdict paths). Replaces the
+            # standalone 'Post fallback verdict comment (review)' step that
+            # used to live here -- the rich comment below is strictly more
+            # informative and uses the same source-aware explanation block
+            # (verdict_source=needs-fallback-bootstrap-pr → "LLM review
+            # skipped — workflow validation guard").
+            verdict="Approve"
+            verdict_source="needs-fallback-bootstrap-pr"
+            agent_ran="false"
+            # Fall through (no exit) so the post-comment renders the rich
+            # summary on the bootstrap path.
           fi
           # Issue #244 root-cause fix: read the verdict from the agent's
           # actual output file (claude-execution-output.json) instead of
@@ -412,16 +409,20 @@ jobs:
             echo "| Agent ran | \`${agent_ran:-false}\` |"
             echo "| Run | \`${{ github.run_id }}\` |"
             echo
-            if [ "${agent_ran:-false}" = "false" ]; then
-              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
+            # Source-aware explanation. Order matters: most specific first
+            # (needs-fallback-bootstrap-pr wins over the generic agent_ran=
+            # false catch-all), then empty-file / no-file / PARSE_FAILED,
+            # then the generic "did not run", then the success message.
+            if [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
+              echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
             elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
               echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
             elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
               echo "> **AI agent run produced no output file.** Verdict defaulted to Approve + warning."
             elif [ "${verdict_source:-}" = "PARSE_FAILED" ]; then
               echo "> **AI agent ran but verdict parsing failed.** The review is inconclusive; verdict is treated as non-blocking. Investigate the parser or agent prompt."
-            elif [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
-              echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+            elif [ "${agent_ran:-false}" = "false" ]; then
+              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
             else
               echo "> AI agent completed a full review."
             fi
@@ -612,22 +613,6 @@ jobs:
             echo "needs_fallback=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Post fallback verdict comment (security)
-        if: steps.fallback.outputs.needs_fallback == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          {
-            echo "Verdict: Approve"
-            echo
-            echo "LLM security (10-dim OWASP) skipped -- workflow validation guard"
-            echo
-            echo 'anthropics/claude-code-action@558b1d6cab4085c7753fe402c10bef0fbb92ac7a # v1 refused to run because this PR modifies one or more files under .github/workflows/. The action enforces identical content with the default branch as a self-protection guard.'
-            echo
-            echo "Action required: manual review of the workflow changes by a maintainer before merge."
-          } | gh pr comment "$PR_NUMBER" --body-file -
-
       - name: Extract security verdict
         id: extract_verdict
         if: always()
@@ -644,7 +629,15 @@ jobs:
             # report agent_ran=false so the severity gate can hard-fail
             # with the bootstrap-PR remediation message.
             echo "agent_ran=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            # Issue #fix-fallback-comment: set bash vars so the rich post-
+            # comment at the bottom of this step fires on the bootstrap-PR
+            # path too (see review-job comment for the rationale). Replaces
+            # the standalone 'Post fallback verdict comment (security)' step.
+            verdict="Approve"
+            verdict_source="needs-fallback-bootstrap-pr"
+            agent_ran="false"
+            # Fall through (no exit) so the post-comment renders the rich
+            # summary on the bootstrap path.
           fi
           # Issue #244 root-cause fix: same as the review extract step —
           # read from the agent's output file, never grep PR comments.
@@ -729,16 +722,20 @@ jobs:
             echo "| Agent ran | \`${agent_ran:-false}\` |"
             echo "| Run | \`${{ github.run_id }}\` |"
             echo
-            if [ "${agent_ran:-false}" = "false" ]; then
-              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
+            # Source-aware explanation. Order matters: most specific first
+            # (needs-fallback-bootstrap-pr wins over the generic agent_ran=
+            # false catch-all), then empty-file / no-file / PARSE_FAILED,
+            # then the generic "did not run", then the success message.
+            if [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
+              echo "> **LLM security review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
             elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
               echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
             elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
               echo "> **AI agent run produced no output file.** Verdict defaulted to Approve + warning."
             elif [ "${verdict_source:-}" = "PARSE_FAILED" ]; then
-              echo "> **AI agent ran but verdict parsing failed.** The review is inconclusive; verdict is treated as non-blocking. Investigate the parser or agent prompt."
-            elif [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
-              echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+              echo "> **AI agent ran but verdict parsing failed.** The security review is inconclusive; verdict is treated as non-blocking. Investigate the parser or agent prompt."
+            elif [ "${agent_ran:-false}" = "false" ]; then
+              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
             else
               echo "> AI agent completed a full security review."
             fi
