@@ -202,6 +202,7 @@ jobs:
               - 🟠 major  ≥ 1, 🔴 = 0    → Verdict: Changes Requested
               - no 🔴, no 🟠             → Verdict: Approve
           claude_args: |
+            --plugin-dir ~/.claude/plugins/marketplaces/dev-kit
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
 
       - name: Run /dev-kit:review via Claude Code opt-in
@@ -234,6 +235,7 @@ jobs:
             (Do not use the bold-wrapped form here; the gate's regex parses
             only "Verdict: <value>".)
           claude_args: |
+            --plugin-dir ~/.claude/plugins/marketplaces/dev-kit
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
 
       - name: Detect bootstrap-PR fallback
@@ -394,8 +396,36 @@ jobs:
           echo "verdict=${verdict}" >> "$GITHUB_OUTPUT"
           echo "verdict_source=${verdict_source}" >> "$GITHUB_OUTPUT"
           echo "agent_ran=${agent_ran}" >> "$GITHUB_OUTPUT"
-          audit_body="<!-- dev-kit-verdict-audit --> run=${{ github.run_id }} job=review status=${{ job.status }} verdict=${verdict:-MISSING} source=${verdict_source:-unknown}"
-          gh pr comment "$PR_NUMBER" --body "$audit_body"
+          {
+            # Hidden audit trail (parseable by external scripts).
+            echo "<!-- dev-kit-verdict-audit --> run=${{ github.run_id }} job=review status=${{ job.status }} verdict=${verdict:-MISSING} source=${verdict_source:-unknown} agent_ran=${agent_ran:-false}"
+            echo
+            # Human-visible summary — always posted, so the PR conversation
+            # always shows a verdict + failure-mode explanation even when the
+            # AI agent did not post the standard review.
+            echo "## :robot: /dev-kit:review (3-dim) — Verdict: ${verdict:-MISSING}"
+            echo
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Verdict | \`${verdict:-MISSING}\` |"
+            echo "| Source | \`${verdict_source:-unknown}\` |"
+            echo "| Agent ran | \`${agent_ran:-false}\` |"
+            echo "| Run | \`${{ github.run_id }}\` |"
+            echo
+            if [ "${agent_ran:-false}" = "false" ]; then
+              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
+            elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
+              echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
+            elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
+              echo "> **AI agent run produced no output file.** Verdict defaulted to Approve + warning."
+            elif [ "${verdict_source:-}" = "PARSE_FAILED" ]; then
+              echo "> **AI agent ran but verdict parsing failed.** The review is inconclusive; verdict is treated as non-blocking. Investigate the parser or agent prompt."
+            elif [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
+              echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+            else
+              echo "> AI agent completed a full review."
+            fi
+          } | gh pr comment "$PR_NUMBER" --body-file -
 
   security:
     # See review-job comment above; same fork-safety contract.
@@ -522,6 +552,7 @@ jobs:
               - 🟠 major  ≥ 1, 🔴 = 0    → Verdict: Changes Requested
               - no 🔴, no 🟠             → Verdict: Approve
           claude_args: |
+            --plugin-dir ~/.claude/plugins/marketplaces/dev-kit
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
 
       - name: Run /dev-kit:security via Claude Code opt-in
@@ -554,6 +585,7 @@ jobs:
             (Do not use the bold-wrapped form here; the gate's regex parses
             only "Verdict: <value>".)
           claude_args: |
+            --plugin-dir ~/.claude/plugins/marketplaces/dev-kit
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
 
       - name: Detect bootstrap-PR fallback
@@ -681,8 +713,36 @@ jobs:
           echo "verdict=${verdict}" >> "$GITHUB_OUTPUT"
           echo "verdict_source=${verdict_source}" >> "$GITHUB_OUTPUT"
           echo "agent_ran=${agent_ran}" >> "$GITHUB_OUTPUT"
-          audit_body="<!-- dev-kit-verdict-audit --> run=${{ github.run_id }} job=security status=${{ job.status }} verdict=${verdict:-MISSING} source=${verdict_source:-unknown}"
-          gh pr comment "$PR_NUMBER" --body "$audit_body"
+          {
+            # Hidden audit trail (parseable by external scripts).
+            echo "<!-- dev-kit-verdict-audit --> run=${{ github.run_id }} job=security status=${{ job.status }} verdict=${verdict:-MISSING} source=${verdict_source:-unknown} agent_ran=${agent_ran:-false}"
+            echo
+            # Human-visible summary — always posted, so the PR conversation
+            # always shows a verdict + failure-mode explanation even when the
+            # AI agent did not post the standard security review.
+            echo "## :robot: /dev-kit:security (10-dim OWASP) — Verdict: ${verdict:-MISSING}"
+            echo
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Verdict | \`${verdict:-MISSING}\` |"
+            echo "| Source | \`${verdict_source:-unknown}\` |"
+            echo "| Agent ran | \`${agent_ran:-false}\` |"
+            echo "| Run | \`${{ github.run_id }}\` |"
+            echo
+            if [ "${agent_ran:-false}" = "false" ]; then
+              echo "> **AI agent did not run.** Verdict defaulted to Approve + warning. The human review gate is what actually blocks merge. See the workflow logs for the failure reason."
+            elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
+              echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
+            elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
+              echo "> **AI agent run produced no output file.** Verdict defaulted to Approve + warning."
+            elif [ "${verdict_source:-}" = "PARSE_FAILED" ]; then
+              echo "> **AI agent ran but verdict parsing failed.** The review is inconclusive; verdict is treated as non-blocking. Investigate the parser or agent prompt."
+            elif [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
+              echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+            else
+              echo "> AI agent completed a full security review."
+            fi
+          } | gh pr comment "$PR_NUMBER" --body-file -
 
   gate:
     # Severity gate: same fork-safety guard. Pull from job outputs --
