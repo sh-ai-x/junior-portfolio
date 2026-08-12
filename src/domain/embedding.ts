@@ -3,6 +3,10 @@
 
 import { MODEL_DIM } from "./memo";
 
+// Re-export so adapters can import MODEL_DIM alongside the rest of the
+// embedding contract from a single module.
+export { MODEL_DIM };
+
 export interface Embedding {
   readonly vector: ReadonlyArray<number>;
   readonly model: string;
