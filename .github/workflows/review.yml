@@ -296,98 +296,86 @@ jobs:
             # Fall through (no exit) so the post-comment renders the rich
             # summary on the bootstrap path.
           fi
-          # Issue #244 root-cause fix: read the verdict from the agent's
-          # actual output file (claude-execution-output.json) instead of
-          # grepping PR comments. The comment-grep fallback was the source
-          # of deterministic gate flapping on boilerplate-web PR #18: the
-          # `grep | tail -1` picked up a stale "Verdict: Changes Requested"
-          # from the previous push, defeating the severity gate's own
-          # "default to Approve on empty verdict" tolerance.
-          AGENT_OUTPUT="${{ runner.temp }}/claude-execution-output.json"
-          if [ ! -f "$AGENT_OUTPUT" ]; then
-            AGENT_OUTPUT="/home/runner/work/_temp/claude-execution-output.json"
-          fi
-          # Issue #625: fetch PR comments for THIS run (filtered by run_id) so
-          # extract-verdict.py can recover the verdict when the MINIMAX
-          # provider drops the assistant stream from the execution file.
-          # The run_id filter defeats #244's stale-comment flap — by
-          # construction only comments posted in THIS run are candidates.
-          COMMENTS_FILE="${{ runner.temp }}/pr-comments-this-run.json"
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/comments" \
-              --jq ".[] | select(.body | contains(\"run=${{ github.run_id }}\")) | {body: .body}" \
-              > "$COMMENTS_FILE" 2>/dev/null || echo "[]" > "$COMMENTS_FILE"
-          file_verdict=""
-          if [ -f "$AGENT_OUTPUT" ]; then
-            file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" "$AGENT_OUTPUT" "$COMMENTS_FILE" 2>/dev/null || echo '')"
-          else
-            # Execution file genuinely missing — still try the comments
-            # fallback before defaulting.
-            file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" /dev/null "$COMMENTS_FILE" 2>/dev/null || echo '')"
-          fi
-          # Track which path produced the verdict for the audit comment.
-          # file-only path → agent-output-file; comments fallback → agent-pr-comment.
-          comment_fallback_used="false"
-          if [ "$file_verdict" = "PARSE_FAILED" ]; then
-            # Issue #612 fix: extract-verdict.py saw the file existed
-            # with parseable content but no recognizable `Verdict:`
-            # line — the agent ran but did not follow the verdict
-            # contract. Thread the PARSE_FAILED sentinel through to
-            # the gate so it hard-fails with the dedicated remediation
-            # message (see the gate's PARSE_FAILED branch) instead of
-            # silently defaulting to Approve (the old consumer-facing
-            # bug). The audit comment's source field now records
-            # `parse-failed-no-verdict` so the reviewer can see the
-            # actual failure mode without re-reading the gate logs.
-            #
-            # Issue #625 exception: when MINIMAX is the provider, the
-            # execution file lacks assistant messages even though the
-            # agent DID post a verdict as a PR comment. extract-verdict.py
-            # tried the comments fallback internally — if it found a
-            # verdict there, file_verdict is no longer PARSE_FAILED.
-            # If we got here with PARSE_FAILED still set, the comments
-            # fallback ALSO didn't find a verdict, so the original
-            # #612 hard-fail logic still applies.
-            echo "::warning::review verdict missing (file=${AGENT_OUTPUT} produced no parseable 'Verdict:' line); gate will hard-fail with parse-failed-no-verdict remediation"
-            verdict="PARSE_FAILED"
-            verdict_source="parse-failed-no-verdict"
-            agent_ran="true"
-          elif [ -n "$file_verdict" ]; then
-            verdict="$file_verdict"
-            # The PR-comments fallback is engaged when the execution
-            # file was missing / unreadable / HTML / PARSE_FAILED — the
-            # script's contract is "file verdict wins when present;
-            # fall through to comments otherwise". Infer which path
-            # produced this verdict from the AGENT_OUTPUT state.
+          # Issue #fix-fallback-comment: skip the file-verdict extraction
+          # on the bootstrap-PR path -- the fallback branch above already
+          # set verdict=Approve, verdict_source=needs-fallback-bootstrap-pr,
+          # agent_ran=false. Without this guard the no-file branch below
+          # would unconditionally overwrite verdict_source to
+          # 'default-approve-no-file', masking the bootstrap-specific
+          # source-aware explanation in the rich post-comment.
+          if [ "${verdict_source:-}" != "needs-fallback-bootstrap-pr" ]; then
+            # Issue #244 root-cause fix: read the verdict from the agent's
+            # actual output file (claude-execution-output.json) instead of
+            # grepping PR comments. The comment-grep fallback was the source
+            # of deterministic gate flapping on boilerplate-web PR #18: the
+            # `grep | tail -1` picked up a stale "Verdict: Changes Requested"
+            # from the previous push, defeating the severity gate's own
+            # "default to Approve on empty verdict" tolerance.
+            AGENT_OUTPUT="${{ runner.temp }}/claude-execution-output.json"
             if [ ! -f "$AGENT_OUTPUT" ]; then
-              verdict_source="agent-pr-comment"
-              comment_fallback_used="true"
-            else
-              verdict_source="agent-output-file"
+              AGENT_OUTPUT="/home/runner/work/_temp/claude-execution-output.json"
             fi
-            agent_ran="true"
-          else
-            # Genuine no-file path: extract-verdict.py returned empty
-            # because the file is missing / HTML / unreadable /
-            # suspiciously small AND the comments fallback also found
-            # nothing. Tolerance is appropriate for these transient
-            # filesystem / network cases — the gate's existing
-            # contract treats empty as "I couldn't read the file"
-            # rather than "the agent ran but produced no verdict"
-            # (that case now flows through the PARSE_FAILED arm above).
-            case "${{ job.status }}" in
-              cancelled|failure)
-                echo "::warning::review verdict missing (job.status=${{ job.status }}, transient); defaulting to Approve"
+            # Issue #625: fetch PR comments for THIS run (filtered by run_id) so
+            # extract-verdict.py can recover the verdict when the MINIMAX
+            # provider drops the assistant stream from the execution file.
+            # The run_id filter defeats #244's stale-comment flap — by
+            # construction only comments posted in THIS run are candidates.
+            COMMENTS_FILE="${{ runner.temp }}/pr-comments-this-run.json"
+            gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/comments" \
+                --jq ".[] | select(.body | contains(\"run=${{ github.run_id }}\")) | {body: .body}" \
+                > "$COMMENTS_FILE" 2>/dev/null || echo "[]" > "$COMMENTS_FILE"
+            file_verdict=""
+            if [ -f "$AGENT_OUTPUT" ]; then
+              file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" "$AGENT_OUTPUT" "$COMMENTS_FILE" 2>/dev/null || echo '')"
+            fi
+            if [ -n "$file_verdict" ]; then
+              verdict="$file_verdict"
+              # Infer which path produced this verdict: the PR-comments
+              # fallback (agent-pr-comment) fires when the execution file
+              # was missing / HTML / PARSE_FAILED; the file path otherwise.
+              if [ ! -f "$AGENT_OUTPUT" ]; then
+                verdict_source="agent-pr-comment"
+              else
+                verdict_source="agent-output-file"
+              fi
+              agent_ran="true"
+            else
+              # ROOT-CAUSE FIX: when the agent's output file is missing or
+              # extract-verdict.py returns nothing, default to Approve +
+              # warning instead of grepping PR comments. Matches the
+              # severity gate's existing contract: empty verdict is valid;
+              # the human gate (REVIEW_REQUIRED / CHANGES_REQUESTED on the
+              # PR) is what actually blocks merge.
+              if [ -f "$AGENT_OUTPUT" ]; then
+                echo "::warning::review verdict missing (agent_ran=true, file=${AGENT_OUTPUT} produced no parseable verdict); defaulting to Approve"
                 verdict="Approve"
-                verdict_source="default-approve-job-${{ job.status }}"
+                verdict_source="default-approve-empty-file"
                 agent_ran="true"
-                ;;
-              *)
-                echo "::warning::review verdict missing (no agent output file at ${AGENT_OUTPUT}); defaulting to Approve"
-                verdict="Approve"
-                verdict_source="default-approve-no-file"
-                agent_ran="false"
-                ;;
-            esac
+              else
+                # Issue #253 backport (boilerplate-web PR #20): case-switch
+                # on ${{ job.status }} so transient failures (timeout /
+                # runtime error → cancelled|failure) are not misclassified
+                # as a bootstrap-PR skip. Pre-#253 the no-file branch was a
+                # flat agent_ran="false", which made boilerplate-web PR #18's
+                # 20-min timeouts hard-fail the gate even though review + CI
+                # were otherwise green. Default arm keeps the bootstrap-PR
+                # skip semantics (agent_ran="false") for success/anything else.
+                case "${{ job.status }}" in
+                  cancelled|failure)
+                    echo "::warning::review verdict missing (job.status=${{ job.status }}, transient); defaulting to Approve"
+                    verdict="Approve"
+                    verdict_source="default-approve-job-${{ job.status }}"
+                    agent_ran="true"
+                    ;;
+                  *)
+                    echo "::warning::review verdict missing (no agent output file at ${AGENT_OUTPUT}); defaulting to Approve"
+                    verdict="Approve"
+                    verdict_source="default-approve-no-file"
+                    agent_ran="false"
+                    ;;
+                esac
+              fi
+            fi
           fi
           echo "review_verdict=${verdict}  source=${verdict_source}  agent_ran=${agent_ran}"
           echo "verdict=${verdict}" >> "$GITHUB_OUTPUT"
@@ -415,6 +403,8 @@ jobs:
             # then the generic "did not run", then the success message.
             if [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
               echo "> **LLM review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+            elif [ "${verdict_source:-}" = "agent-pr-comment" ]; then
+              echo "> **AI agent ran via the MINIMAX provider.** The execution file lacked assistant blocks (provider-specific shape difference, issue #625), so the verdict was recovered from the agent's PR comment body. Verdict: \`${verdict}\`."
             elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
               echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
             elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
@@ -639,68 +629,70 @@ jobs:
             # Fall through (no exit) so the post-comment renders the rich
             # summary on the bootstrap path.
           fi
-          # Issue #244 root-cause fix: same as the review extract step —
-          # read from the agent's output file, never grep PR comments.
-          AGENT_OUTPUT="${{ runner.temp }}/claude-execution-output.json"
-          if [ ! -f "$AGENT_OUTPUT" ]; then
-            AGENT_OUTPUT="/home/runner/work/_temp/claude-execution-output.json"
-          fi
-          # Issue #625: same comment-fallback fetch as the review job — see
-          # that step for the rationale (MINIMAX provider drops the
-          # assistant stream; recover from PR comments filtered by run_id).
-          COMMENTS_FILE="${{ runner.temp }}/pr-comments-this-run.json"
-          gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/comments" \
-              --jq ".[] | select(.body | contains(\"run=${{ github.run_id }}\")) | {body: .body}" \
-              > "$COMMENTS_FILE" 2>/dev/null || echo "[]" > "$COMMENTS_FILE"
-          file_verdict=""
-          if [ -f "$AGENT_OUTPUT" ]; then
-            file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" "$AGENT_OUTPUT" "$COMMENTS_FILE" 2>/dev/null || true)"
-          else
-            file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" /dev/null "$COMMENTS_FILE" 2>/dev/null || true)"
-          fi
-          if [ "$file_verdict" = "PARSE_FAILED" ]; then
-            # Issue #612 fix (symmetric with the review job): the agent
-            # ran (file exists, JSONL parseable) but did not emit a
-            # recognizable `Verdict:` line. Thread the PARSE_FAILED
-            # sentinel through to the gate so it hard-fails with the
-            # dedicated remediation message instead of silently
-            # defaulting to Approve (the old consumer-facing bug).
-            #
-            # Issue #625 exception: see review-job comment for the
-            # MINIMAX-fallback rationale.
-            echo "::warning::security verdict missing (file=${AGENT_OUTPUT} produced no parseable 'Verdict:' line); gate will hard-fail with parse-failed-no-verdict remediation"
-            verdict="PARSE_FAILED"
-            verdict_source="parse-failed-no-verdict"
-            agent_ran="true"
-          elif [ -n "$file_verdict" ]; then
-            verdict="$file_verdict"
+          # Issue #fix-fallback-comment: skip the file-verdict extraction
+          # on the bootstrap-PR path -- the fallback branch above already
+          # set verdict=Approve, verdict_source=needs-fallback-bootstrap-pr,
+          # agent_ran=false. Without this guard the no-file branch below
+          # would unconditionally overwrite verdict_source.
+          if [ "${verdict_source:-}" != "needs-fallback-bootstrap-pr" ]; then
+            # Issue #244 root-cause fix: same as the review extract step —
+            # read from the agent's output file, never grep PR comments.
+            AGENT_OUTPUT="${{ runner.temp }}/claude-execution-output.json"
             if [ ! -f "$AGENT_OUTPUT" ]; then
-              verdict_source="agent-pr-comment"
-            else
-              verdict_source="agent-output-file"
+              AGENT_OUTPUT="/home/runner/work/_temp/claude-execution-output.json"
             fi
-            agent_ran="true"
-          else
-            # Genuine no-file path: extract-verdict.py returned empty
-            # because the file is missing / HTML / unreadable /
-            # suspiciously small AND the comments fallback also found
-            # nothing. Tolerance is appropriate for these transient
-            # filesystem / network cases — see the review-job comment
-            # above for the full rationale.
-            case "${{ job.status }}" in
-              cancelled|failure)
-                echo "::warning::security verdict missing (job.status=${{ job.status }}, transient); defaulting to Approve"
+            # Issue #625: fetch PR comments for THIS run (filtered by run_id) so
+            # extract-verdict.py can recover the verdict when the MINIMAX
+            # provider drops the assistant stream from the execution file.
+            # The run_id filter defeats #244's stale-comment flap — by
+            # construction only comments posted in THIS run are candidates.
+            COMMENTS_FILE="${{ runner.temp }}/pr-comments-this-run.json"
+            gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number || github.event.inputs.pr_number }}/comments" \
+                --jq ".[] | select(.body | contains(\"run=${{ github.run_id }}\")) | {body: .body}" \
+                > "$COMMENTS_FILE" 2>/dev/null || echo "[]" > "$COMMENTS_FILE"
+            file_verdict=""
+            if [ -f "$AGENT_OUTPUT" ]; then
+              file_verdict="$(python3 "${{ github.workspace }}/scripts/extract-verdict.py" "$AGENT_OUTPUT" "$COMMENTS_FILE" 2>/dev/null || true)"
+            fi
+            if [ -n "$file_verdict" ]; then
+              verdict="$file_verdict"
+              # Infer which path produced this verdict: the PR-comments
+              # fallback (agent-pr-comment) fires when the execution file
+              # was missing / HTML / PARSE_FAILED; the file path otherwise.
+              if [ ! -f "$AGENT_OUTPUT" ]; then
+                verdict_source="agent-pr-comment"
+              else
+                verdict_source="agent-output-file"
+              fi
+              agent_ran="true"
+            else
+              # Same root-cause fix as the review job: default to Approve +
+              # warning on empty verdict, never grep PR comments.
+              if [ -f "$AGENT_OUTPUT" ]; then
+                echo "::warning::security verdict missing (agent_ran=true, file=${AGENT_OUTPUT} produced no parseable verdict); defaulting to Approve"
                 verdict="Approve"
-                verdict_source="default-approve-job-${{ job.status }}"
+                verdict_source="default-approve-empty-file"
                 agent_ran="true"
-                ;;
-              *)
-                echo "::warning::security verdict missing (no agent output file at ${AGENT_OUTPUT}); defaulting to Approve"
-                verdict="Approve"
-                verdict_source="default-approve-no-file"
-                agent_ran="false"
-                ;;
-            esac
+              else
+                # Issue #253 backport (boilerplate-web PR #20): symmetric
+                # with the review job — see review-branch comment above for
+                # the cancelled|failure vs default rationale.
+                case "${{ job.status }}" in
+                  cancelled|failure)
+                    echo "::warning::security verdict missing (job.status=${{ job.status }}, transient); defaulting to Approve"
+                    verdict="Approve"
+                    verdict_source="default-approve-job-${{ job.status }}"
+                    agent_ran="true"
+                    ;;
+                  *)
+                    echo "::warning::security verdict missing (no agent output file at ${AGENT_OUTPUT}); defaulting to Approve"
+                    verdict="Approve"
+                    verdict_source="default-approve-no-file"
+                    agent_ran="false"
+                    ;;
+                esac
+              fi
+            fi
           fi
           echo "security_verdict=${verdict}  source=${verdict_source}  agent_ran=${agent_ran}"
           echo "verdict=${verdict}" >> "$GITHUB_OUTPUT"
@@ -728,6 +720,8 @@ jobs:
             # then the generic "did not run", then the success message.
             if [ "${verdict_source:-}" = "needs-fallback-bootstrap-pr" ]; then
               echo "> **LLM security review skipped — workflow validation guard.** This PR modifies \`.github/workflows/*\`. Manual review of the workflow changes is required by a maintainer before merge."
+            elif [ "${verdict_source:-}" = "agent-pr-comment" ]; then
+              echo "> **AI agent ran via the MINIMAX provider.** The execution file lacked assistant blocks (provider-specific shape difference, issue #625), so the verdict was recovered from the agent's PR comment body. Verdict: \`${verdict}\`."
             elif [ "${verdict_source:-}" = "default-approve-empty-file" ]; then
               echo "> **AI agent ran but produced no parseable verdict.** The agent's output file exists but no \`Verdict: <value>\` line was found. Defaulted to Approve so the human gate can still block."
             elif [ "${verdict_source:-}" = "default-approve-no-file" ]; then
