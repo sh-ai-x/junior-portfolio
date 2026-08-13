@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0b0f" media="(prefers-color-scheme: dark)" />
+<meta name="description" content="I build the tooling that makes AI coding agents ship reliable code. 41 skills, 22 hooks, 118 tests, multi-runtime — a production Claude Code plugin marketplace distribution." />
+<meta name="author" content="Sanghee Lee" />
+<title>Sanghee Lee — AI Developer Tools Engineer · Portfolio</title>
+<meta property="og:title" content="Sanghee Lee — AI Developer Tools Engineer" />
+<meta property="og:description" content="Built dev-harness-kit: a 41-skill, 22-hook, multi-runtime Claude Code plugin. Target roles at Sourcegraph, Cursor, Anthropic, Modal." />
+<style>
+  :root {
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Fira Code", Menlo, Consolas, monospace;
+    --bg: #ffffff; --bg-elev-1: #fafaf9; --bg-elev-2: #f4f4f2;
+    --fg: #0b0b0f; --fg-muted: #5b5b66; --fg-faint: #8e8e99;
+    --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.14);
+    --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.12);
+    --good: #34c759; --warn: #ff9f0a; --bad: #ff453a;
+    --code-bg: #f4f4f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0b0f; --bg-elev-1: #131318; --bg-elev-2: #1c1c22;
+      --fg: #f5f5f7; --fg-muted: #aeaeb8; --fg-faint: #6e6e78;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+      --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.18);
+      --good: #30d158; --warn: #ff9f0a; --bad: #ff453a;
+      --code-bg: #1c1c22;
+    }
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-display);
+    background: var(--bg); color: var(--fg);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55; font-size: 17px;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  h1, h2, h3, h4 { margin: 0; letter-spacing: -0.022em; line-height: 1.15; font-weight: 600; }
+  h1 { font-size: clamp(2.1rem, 5.4vw, 4rem); letter-spacing: -0.035em; }
+  h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
+  h3 { font-size: 1.15rem; font-weight: 600; }
+  h4 { font-size: 0.95rem; font-weight: 600; color: var(--fg-muted); letter-spacing: 0; text-transform: uppercase; }
+  p { margin: 0; } ul, ol { margin: 0; padding: 0; }
+  code, pre { font-family: var(--font-mono); font-size: 0.9em; }
+  code { background: var(--code-bg); padding: 2px 6px; border-radius: 5px; }
+  pre { background: var(--code-bg); padding: 14px 16px; border-radius: 12px; overflow-x: auto; border: 1px solid var(--border); line-height: 1.5; }
+  pre code { background: transparent; padding: 0; }
+
+  .container { width: min(960px, calc(100% - 32px)); margin-inline: auto; }
+  .container-wide { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
+  section { padding: 80px 0; border-top: 1px solid var(--border); }
+  .eyebrow { color: var(--fg-faint); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+  .brand { font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em; }
+  .brand-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--good); border-radius: 50%; margin-right: 8px;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent);
+  }
+  .nav { display: flex; gap: 18px; align-items: center; }
+  .nav a { color: var(--fg-muted); font-size: 0.88rem; }
+  .nav a:hover { color: var(--fg); text-decoration: none; }
+  .icon-btn {
+    width: 34px; height: 34px; display: inline-flex;
+    align-items: center; justify-content: center;
+    border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg-elev-1); color: var(--fg-muted);
+    cursor: pointer; transition: transform .12s ease, background-color .12s ease;
+  }
+  .icon-btn:hover { background: var(--bg-elev-2); color: var(--fg); }
+
+  .hero { padding: 80px 0 56px; border-top: 0; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 11px; border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev-1); color: var(--fg-muted);
+    font-size: 0.78rem; font-weight: 500;
+  }
+  .pill.solid { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+  .hero h1 .accent { background: linear-gradient(90deg, #0a84ff, #5e5ce6 60%, #bf5af2); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero-lead { margin-top: 18px; font-size: clamp(1.05rem, 2vw, 1.22rem); color: var(--fg-muted); max-width: 64ch; line-height: 1.5; }
+  .hero-cta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 0.9rem; font-weight: 500;
+    border: 1px solid var(--border-strong);
+    background: var(--bg); color: var(--fg); cursor: pointer;
+    transition: transform .12s ease, background-color .12s ease;
+  }
+  .btn:hover { background: var(--bg-elev-1); text-decoration: none; }
+  .btn:active { transform: scale(0.98); }
+  .btn.primary { background: var(--fg); color: var(--bg); border-color: transparent; }
+  .btn.primary:hover { opacity: 0.9; }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* Position recs (front of portfolio) */
+  .position-grid {
+    margin-top: 36px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  }
+  .pos { background: var(--bg); padding: 20px 22px; }
+  .pos .rank { color: var(--fg-faint); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .pos .company { font-weight: 600; font-size: 1.05rem; margin-top: 4px; }
+  .pos .role { color: var(--fg-muted); font-size: 0.86rem; margin-top: 2px; }
+  .pos .why { color: var(--fg-muted); font-size: 0.88rem; margin-top: 12px; line-height: 1.5; }
+  .pos .why b { color: var(--fg); }
+  .pos.tier1 { background: linear-gradient(135deg, var(--accent-soft), transparent); }
+  .pos .badge { display: inline-block; margin-top: 10px; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; background: var(--bg-elev-2); color: var(--fg-muted); font-weight: 500; }
+
+  /* Stat strip */
+  .strip {
+    margin-top: 48px;
+    padding: 18px 22px;
+    background: var(--bg-elev-1); border: 1px solid var(--border); border-radius: 14px;
+    display: flex; flex-wrap: wrap; gap: 14px 26px;
+    font-size: 0.92rem; color: var(--fg-muted);
+    align-items: center;
+  }
+  .strip .b { font-weight: 600; color: var(--fg); font-variant-numeric: tabular-nums; }
+  .strip .sep { color: var(--fg-faint); }
+
+  /* Section: capability matrix */
+  .cap-grid {
+    margin-top: 28px;
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+  }
+  .cap {
+    background: var(--bg-elev-1); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px;
+    display: grid; grid-template-columns: 220px 1fr; gap: 24px;
+  }
+  @media (max-width: 720px) { .cap { grid-template-columns: 1fr; gap: 12px; } }
+  .cap .label { font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; }
+  .cap .source { color: var(--accent); font-family: var(--font-mono); font-size: 0.82rem; margin-top: 4px; }
+  .cap .proof { color: var(--fg-muted); font-size: 0.92rem; line-height: 1.55; }
+  .cap .proof ul { padding-left: 0; list-style: none; }
+  .cap .proof li { position: relative; padding-left: 14px; margin-bottom: 6px; }
+  .cap .proof li::before {
+    content: ""; position: absolute; left: 0; top: 0.55em;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--fg-faint);
+  }
+  .cap .proof code { font-size: 0.82rem; }
+
+  /* Project deep-dive */
+  .project-hero {
+    margin-top: 18px;
+    background: linear-gradient(135deg, var(--bg-elev-1), var(--bg-elev-2));
+    border: 1px solid var(--border); border-radius: 20px; padding: 28px;
+  }
+  .project-hero .top-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; }
+  .project-hero h3 { font-size: 1.4rem; letter-spacing: -0.02em; }
+  .project-hero .role { color: var(--fg-faint); font-size: 0.86rem; font-weight: 500; }
+  .project-hero .desc { margin-top: 12px; color: var(--fg-muted); font-size: 0.98rem; max-width: 70ch; }
+
+  .psr-grid { margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 760px) { .psr-grid { grid-template-columns: 1fr; } }
+  .psr { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative; }
+  .psr .num-tag {
+    position: absolute; top: 14px; right: 14px;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--fg-faint); background: var(--bg-elev-2);
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .psr h4 { color: var(--fg); margin-bottom: 10px; font-weight: 600; font-size: 0.95rem; }
+  .psr ul { padding-left: 0; list-style: none; }
+  .psr li {
+    position: relative; padding-left: 14px;
+    margin-bottom: 6px; color: var(--fg-muted);
+    font-size: 0.88rem; line-height: 1.5;
+  }
+  .psr li::before {
+    content: ""; position: absolute; left: 0; top: 0.55em;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--fg-faint);
+  }
+  .psr li b { color: var(--fg); font-weight: 600; }
+
+  /* Metrics row */
+  .metrics {
+    margin-top: 18px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .metric { background: var(--bg-elev-1); border-radius: 10px; padding: 14px 16px; }
+  .metric .num { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .metric .num .unit { color: var(--fg-muted); font-size: 0.78rem; margin-left: 2px; font-weight: 500; }
+  .metric .label { color: var(--fg-faint); font-size: 0.78rem; margin-top: 4px; }
+
+  /* Architecture / repo map */
+  .repo-map {
+    margin-top: 22px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px; font-family: var(--font-mono); font-size: 0.82rem;
+    line-height: 1.7; color: var(--fg-muted); overflow-x: auto;
+    white-space: pre;
+  }
+  .repo-map .d { color: var(--accent); font-weight: 500; }
+  .repo-map .f { color: var(--fg); }
+  .repo-map .c { color: var(--fg-faint); }
+
+  /* Skill list (full) */
+  .skill-grid {
+    margin-top: 18px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .skill-tag {
+    padding: 4px 10px; border-radius: 6px;
+    background: var(--bg-elev-1); border: 1px solid var(--border);
+    color: var(--fg-muted); font-family: var(--font-mono); font-size: 0.78rem;
+    font-weight: 500;
+  }
+  .skill-tag.hot { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+
+  /* Hook matrix mini */
+  .hook-matrix {
+    margin-top: 18px; overflow-x: auto;
+    background: var(--bg-elev-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 4px;
+  }
+  table.hooks { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  table.hooks th, table.hooks td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border); }
+  table.hooks th { background: transparent; color: var(--fg-muted); font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  table.hooks td.hook { text-align: left; color: var(--fg); font-weight: 500; }
+  table.hooks td.yes { color: var(--good); font-weight: 700; }
+  table.hooks td.read { color: var(--warn); font-weight: 700; }
+  table.hooks tr:last-child td { border-bottom: none; }
+  table.hooks td.hook code { background: transparent; padding: 0; color: var(--fg); font-weight: 500; }
+
+  /* Why-stack */
+  .why-list { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .why {
+    display: grid; grid-template-columns: 130px 1fr;
+    gap: 16px; padding: 14px 16px; border-radius: 12px;
+    background: var(--bg-elev-1); border: 1px solid var(--border); align-items: start;
+  }
+  @media (max-width: 640px) { .why { grid-template-columns: 1fr; gap: 6px; } }
+  .why .stack { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+  .why .reason { color: var(--fg-muted); font-size: 0.9rem; line-height: 1.55; }
+  .why .reason b { color: var(--fg); font-weight: 600; }
+
+  /* Timeline */
+  .timeline { margin-top: 18px; position: relative; padding-left: 24px; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 2px; background: var(--border-strong); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item::before { content: ""; position: absolute; left: -20px; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--bg); border: 2px solid var(--fg-faint); }
+  .tl-item.milestone::before { background: var(--accent); border-color: var(--accent); }
+  .tl-item .when { font-size: 0.78rem; color: var(--fg-faint); font-weight: 500; letter-spacing: 0.02em; }
+  .tl-item .what { font-weight: 600; margin-top: 2px; font-size: 0.96rem; }
+  .tl-item .detail { color: var(--fg-muted); font-size: 0.9rem; margin-top: 4px; line-height: 1.5; }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 22px; }
+  .contact a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--bg-elev-1);
+    color: var(--fg); font-weight: 500;
+    transition: transform .12s ease, background-color .12s ease;
+  }
+  .contact a:hover { text-decoration: none; background: var(--bg-elev-2); transform: translateY(-1px); }
+  .contact a svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--fg-muted); }
+  .contact a small { display: block; color: var(--fg-faint); font-size: 0.74rem; font-weight: 400; margin-top: 2px; }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 48px; color: var(--fg-faint); font-size: 0.85rem; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .reveal { opacity: 0; transform: translateY(8px); transition: opacity .55s ease, transform .55s ease; }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+  @media print {
+    .topbar, .hero-cta, .icon-btn, footer .print-hide { display: none !important; }
+    body { font-size: 11pt; }
+    section { padding: 20px 0; page-break-inside: avoid; }
+    .cap, .project-hero, .why { break-inside: avoid; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand"><span class="brand-dot" aria-hidden="true"></span>Sanghee Lee</div>
+    <nav class="nav" aria-label="Primary">
+      <a href="#target">Target roles</a>
+      <a href="#flagship">Flagship</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-meta">
+      <span class="pill solid"><span class="dot"></span>Open to AI developer-tools roles</span>
+      <span class="pill">Junior · Seoul / Remote</span>
+    </div>
+    <h1>I build the tooling that makes <span class="accent">AI coding agents ship reliable code.</span></h1>
+    <p class="hero-lead">
+      Author of <code>dev-harness-kit</code> — a 41-skill, 22-hook Claude Code plugin
+      that enforces TDD, worktree discipline, and verification gates via deterministic
+      hooks (not model judgment). Runs in both Claude Code and Codex. The artifact
+      itself is the proof — every claim on this page is a file, line, or test count
+      in the repo.
+    </p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#flagship">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        See dev-harness-kit
+      </a>
+      <a class="btn" href="#target">Target companies →</a>
+      <a class="btn" href="#" onclick="window.print(); return false;">Save as PDF</a>
+    </div>
+
+    <div class="strip">
+      <span><span class="b">41</span> skills</span><span class="sep">·</span>
+      <span><span class="b">22</span> hook files</span><span class="sep">·</span>
+      <span><span class="b">118</span> test files</span><span class="sep">·</span>
+      <span><span class="b">~40k</span> LoC tests</span><span class="sep">·</span>
+      <span><span class="b">~24k</span> LoC source</span><span class="sep">·</span>
+      <span><span class="b">2</span> runtimes (Claude + Codex)</span><span class="sep">·</span>
+      <span><span class="b">v0.3.239</span> shipped</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Target roles ======================== -->
+<section id="target">
+  <div class="container">
+    <div class="eyebrow">Position analysis · based on 9 company JDs</div>
+    <h2>Where this background fits.</h2>
+    <p style="color: var(--fg-muted); margin-top: 14px; max-width: 68ch;">
+      From JDs scraped 2026-08-10 (Sourcegraph, Anthropic, Replit, Cognition, LangChain, Modal, Cloudflare, Cursor, Continue.dev).
+      Most companies in AI developer-tools <em>don't</em> post explicit new-grad JDs — but their
+      IC2 / 2-5 YoE bands are the realistic entry, and Anthropic/Cognition don't surface those at all.
+      The list below ranks what I'd actually apply to first.
+    </p>
+
+    <div class="position-grid">
+      <div class="pos tier1">
+        <div class="rank">Tier 1 — direct apply</div>
+        <div class="company">Sourcegraph</div>
+        <div class="role">Software Engineer IC2 — Code Search / Code Understanding</div>
+        <p class="why">Only AI-coding company in the sample with <b>both</b> a public IC2 JD <em>and</em> a published junior-advocacy policy ("Revenge of the junior developer"). JD requires Go + TypeScript + GraphQL + Docker + Bazel + multi-service — all of which dev-harness-kit exercises daily.</p>
+        <span class="badge">greenhouse.io/sourcegraph91</span>
+      </div>
+      <div class="pos tier1">
+        <div class="rank">Tier 1 — direct apply</div>
+        <div class="company">Cursor</div>
+        <div class="role">Software Engineer (post-Continue acquisition)</div>
+        <p class="why">Absorbed the Continue team (Aug 2025). Continue was the open-source AI-coding surface I most directly map onto — config.yaml ↔ hooks, MCP servers ↔ skills, .continue/ ↔ .claude-plugin. Cursor's hiring is via careers page; no IC1/intern listed but a strong GitHub/portfolio cold-application works.</p>
+        <span class="badge">cursor.com/careers</span>
+      </div>
+      <div class="pos">
+        <div class="rank">Tier 2 — cold outreach</div>
+        <div class="company">Modal Labs</div>
+        <div class="role">Software Engineer (generalist, YC W2023)</div>
+        <p class="why">DevEx-heavy startup: SDK + CLI distribution + container CI. Dev-harness-kit's multi-provider CI swap (bin/set-provider.sh) and CLI/TUI plugin shape map directly. No explicit junior JD but small-team "ship-it" energy fits a developer-tools-builder profile.</p>
+        <span class="badge">modal.com/jobs</span>
+      </div>
+      <div class="pos">
+        <div class="rank">Tier 2 — cold outreach</div>
+        <div class="company">Cloudflare (Workers AI)</div>
+        <div class="role">Software Engineer — Developer Platform / Workers</div>
+        <p class="why">Plugin-marketplace distribution thinking maps to Workers' template/marketplace surface; hook-driven code execution maps to V8 isolate model. No Workers AI junior JD currently posted — apply via general SWE pipeline and target the EM directly.</p>
+        <span class="badge">cloudflare.com/careers</span>
+      </div>
+      <div class="pos">
+        <div class="rank">Tier 2 — cold outreach</div>
+        <div class="company">Anthropic (Claude Code / Agent SDK)</div>
+        <div class="role">Software Engineer — Claude Code (no formal junior track)</div>
+        <p class="why">I literally built a Claude Code plugin — Claude Code is the runtime. Anthropic's public roles skew senior (ML Networking JD demands 5+ years systems + eBPF), but plugin/SDK team fits the profile better than most. Cold outreach via a maintainer-to-maintainer note referencing specific SDK APIs I used.</p>
+        <span class="badge">anthropic.com/careers</span>
+      </div>
+      <div class="pos">
+        <div class="rank">Skip</div>
+        <div class="company">Continue.dev</div>
+        <div class="role">—</div>
+        <p class="why">Acquired by Cursor (Aug 2025). Project archived, repo read-only, 0 jobs. Redirect to Cursor above.</p>
+        <span class="badge">acquired</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Flagship: dev-harness-kit ======================== -->
+<section id="flagship">
+  <div class="container">
+    <div class="eyebrow">Flagship · the artifact that backs every claim</div>
+    <h2>dev-harness-kit · v0.3.239</h2>
+    <p style="color: var(--fg-muted); margin-top: 14px; max-width: 68ch;">
+      A Claude Code plugin that turns ad-hoc agent sessions into a deterministic
+      build pipeline: bootstrap → plan → build → review → ship. Guardrails are
+      <em>hooks</em> (code, not model judgment), the pipeline is a state machine,
+      and every completion claim must quote an exit code (Iron Law L3).
+    </p>
+
+    <div class="project-hero reveal">
+      <div class="top-row">
+        <h3>Plugin marketplace distribution with cross-runtime hooks</h3>
+        <span class="role">v0.3.239 · 41 skills · 22 hooks · MIT</span>
+      </div>
+      <p class="desc">
+        Ships as a Claude Code plugin (`.claude-plugin/plugin.json`), with a parallel
+        Codex distribution. Hooks run on Claude Code's event matrix
+        (PreToolUse / PostToolUse / UserPromptSubmit / SessionStart / Stop) and on
+        Codex's equivalent lifecycle. The same iron-laws SSOT is consulted by both.
+      </p>
+
+      <div class="psr-grid">
+        <div class="psr">
+          <span class="num-tag">P</span>
+          <h4>Problem</h4>
+          <ul>
+            <li>AI coding agents ship code without test discipline or commit hygiene. They "claim done" without proof.</li>
+            <li>Plugins today are soft prompts — the model can choose to ignore them. There's no enforcement layer.</li>
+            <li>Claude Code and Codex have similar but incompatible plugin models; users have to pick.</li>
+          </ul>
+        </div>
+        <div class="psr">
+          <span class="num-tag">S</span>
+          <h4>Solution</h4>
+          <ul>
+            <li><b>Hooks as a code-level enforcement layer</b>: <code>worktree-guard.sh</code> denies Edit/Write in main checkout (must-fail-closed on jq missing).</li>
+            <li><b>State machine stages</b>: bootstrap → plan → build → review → ship. Each has its own active hooks.</li>
+            <li><b>Iron Laws SSOT</b> (<code>iron-laws/index.md</code>): 8 immutable rules — L1 requires verification artifact, L3 requires quoted exit code on completion.</li>
+            <li><b>Runtime adapter layer</b>: <code>lib/runtime_adapters/</code> so the same hooks fire under Claude Code or Codex.</li>
+          </ul>
+        </div>
+        <div class="psr">
+          <span class="num-tag">R</span>
+          <h4>Result</h4>
+          <ul>
+            <li><b>~24,000</b> LoC source (Python + shell) across <code>hooks/</code>, <code>skills/</code>, <code>lib/</code>, <code>bin/</code>.</li>
+            <li><b>~40,000</b> LoC tests in <b>118 test files</b> — the model is forbidden by hook from declaring done without these running green.</li>
+            <li>Shipped to <b>v0.3.239</b> via automated semantic-release workflow (<code>version-bump.yml</code>).</li>
+            <li>Cross-runtime: same hooks enforce the same rules in Claude Code and Codex.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><div class="num">41</div><div class="label">skills shipped</div></div>
+        <div class="metric"><div class="num">22</div><div class="label">hook shell files</div></div>
+        <div class="metric"><div class="num">118</div><div class="label">test files</div></div>
+        <div class="metric"><div class="num">~40k</div><div class="label">LoC tests</div></div>
+        <div class="metric"><div class="num">~24k</div><div class="label">LoC source</div></div>
+        <div class="metric"><div class="num">2</div><div class="label">runtimes (Claude + Codex)</div></div>
+        <div class="metric"><div class="num">v0.3.239</div><div class="label">current release</div></div>
+      </div>
+
+      <div class="repo-map"><span class="c"># Repo map (skeleton)</span>
+<span class="d">dev-harness-kit/</span>
+├── <span class="f">.claude-plugin/</span><span class="c">        # Claude Code plugin manifest</span>
+│   └── <span class="f">plugin.json</span> <span class="c"># name=dev-kit, version=0.3.239</span>
+├── <span class="d">hooks/</span><span class="c">                       # 22 enforcement shell scripts</span>
+│   ├── <span class="f">worktree-guard.sh</span>   <span class="c"># PreToolUse Edit/Write block (must-fail-closed)</span>
+│   ├── <span class="f">git-guard.sh</span>        <span class="c"># PreToolUse Bash: no commit/push to main</span>
+│   ├── <span class="f">tdd-guard.sh</span>        <span class="c"># build-stage: TDD methodology enforcement</span>
+│   ├── <span class="f">stop-verify.sh</span>      <span class="c"># Stop hook: AC claim verification (L3)</span>
+│   └── <span class="f">hooks.json</span>          <span class="c"># event matcher wiring</span>
+├── <span class="d">skills/</span><span class="c">                      # 41 slash commands, each a SKILL.md</span>
+│   ├── <span class="f">bootstrap/</span> <span class="f">plan/</span> <span class="f">build/</span> <span class="f">build-tdd/</span> <span class="f">build-debug/</span> <span class="f">review/</span> <span class="f">ship/</span>
+│   ├── <span class="f">pr-verify/</span> <span class="f">babysit-pr/</span> <span class="f">ci-doctor/</span> <span class="f">ci-triage/</span> <span class="f">hook-doctor/</span>
+│   ├── <span class="f">research/</span> <span class="f">research-plan-build/</span> <span class="f">proposal/</span> <span class="f">evaluate/</span> <span class="f">valuate/</span>
+│   └── <span class="f">token-analyzer/</span> <span class="f">inspect/</span> <span class="f">prune/</span> <span class="f">refactor/</span> <span class="f">learn/</span> <span class="f">log/</span> ...
+├── <span class="d">lib/</span><span class="c">                         # 2.2M of analysis + adapters + harness core</span>
+│   ├── <span class="f">runtime_adapters/</span>  <span class="c"># Claude Code / Codex adapters (portability layer)</span>
+│   ├── <span class="f">analysis_core/</span>     <span class="c"># 8-dim code audit engine</span>
+│   └── <span class="f">render_proposal_html.py</span> <span class="c"># proposal skill renderer</span>
+├── <span class="d">iron-laws/index.md</span><span class="c">         # MUST-8: L1–L8 invariants (SSOT)</span>
+├── <span class="d">rules/</span><span class="c">                      # session hygiene, worktree, skill authoring rules</span>
+├── <span class="d">tests/</span><span class="c">                      # 118 test files (~40k LoC)</span>
+├── <span class="d">.github/workflows/</span><span class="c">           # CI: review, security, ship, version-bump</span>
+└── <span class="d">docs/</span><span class="c">                       # CODEBASE-MAP.md, proposals/, architecture/</span></div>
+    </div>
+
+    <h3 style="margin-top: 36px;">Skills shipped (41) — the surface area</h3>
+    <div class="skill-grid">
+      <span class="skill-tag hot">bootstrap</span><span class="skill-tag hot">plan</span><span class="skill-tag hot">build</span><span class="skill-tag hot">build-tdd</span><span class="skill-tag hot">build-debug</span><span class="skill-tag hot">build-verify</span><span class="skill-tag hot">build-refactor</span><span class="skill-tag hot">review</span><span class="skill-tag hot">ship</span>
+      <span class="skill-tag">pr-verify</span><span class="skill-tag">babysit-pr</span><span class="skill-tag">ci-doctor</span><span class="skill-tag">ci-setup</span><span class="skill-tag">ci-triage</span><span class="skill-tag">hook-doctor</span><span class="skill-tag">code-viz</span><span class="skill-tag">config</span><span class="skill-tag">docs-maintenance</span>
+      <span class="skill-tag">evaluate</span><span class="skill-tag">valuate</span><span class="skill-tag">interview</span><span class="skill-tag">learn</span><span class="skill-tag">proposal</span><span class="skill-tag">prune</span><span class="skill-tag">prune-propose</span><span class="skill-tag">refactor</span><span class="skill-tag">inspect</span>
+      <span class="skill-tag">research</span><span class="skill-tag">research-plan-build</span><span class="skill-tag">security</span><span class="skill-tag">token-analyzer</span><span class="skill-tag">llm-refresh</span><span class="skill-tag">log</span><span class="skill-tag">linear</span><span class="skill-tag">sot-harness-writer</span><span class="skill-tag">status</span>
+      <span class="skill-tag">cost-gate</span><span class="skill-tag">codex-cache-update</span><span class="skill-tag">acp</span><span class="skill-tag">bump</span>
+    </div>
+
+    <h3 style="margin-top: 32px;">Hook matrix — enforcement is code, not prose</h3>
+    <div class="hook-matrix">
+      <table class="hooks" aria-label="Hook matrix">
+        <thead>
+          <tr><th>Hook</th><th>Bootstrap</th><th>Plan</th><th>Build</th><th>Review</th><th>Ship</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="hook"><code>tdd-guard</code></td><td>—</td><td>—</td><td class="yes">✓</td><td>—</td><td>—</td></tr>
+          <tr><td class="hook"><code>bash-guard</code></td><td>—</td><td>—</td><td class="yes">✓</td><td>—</td><td>—</td></tr>
+          <tr><td class="hook"><code>secret-scan</code></td><td class="read">R</td><td>—</td><td class="yes">✓</td><td class="yes">✓</td><td>—</td></tr>
+          <tr><td class="hook"><code>slop-detector</code></td><td>—</td><td>—</td><td class="yes">✓</td><td class="yes">✓</td><td>—</td></tr>
+          <tr><td class="hook"><code>stop-verify</code></td><td>—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td class="hook"><code>worktree-guard</code></td><td colspan="5" style="text-align:left; color: var(--fg-muted);">PreToolUse Edit/Write — denies in main checkout (MUST)</td></tr>
+          <tr><td class="hook"><code>git-guard</code></td><td colspan="5" style="text-align:left; color: var(--fg-muted);">PreToolUse Bash — denies commit/push to main</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Capability matrix (JDs → repo) ======================== -->
+<section id="capabilities">
+  <div class="container">
+    <div class="eyebrow">JD-derived capability matrix</div>
+    <h2>What JDs require · what the repo proves.</h2>
+    <p style="color: var(--fg-muted); margin-top: 14px; max-width: 68ch;">
+      Cross-cutting capabilities extracted from 9 JDs (Sourcegraph, Anthropic, Replit, Cognition, LangChain, Modal, Cloudflare, Cursor, Continue.dev). Each row maps a JD requirement to a concrete artifact in this repo.
+    </p>
+
+    <div class="cap-grid">
+      <div class="cap reveal">
+        <div>
+          <div class="label">Plugin / distribution systems</div>
+          <div class="source">Sourcegraph · Cursor · Continue · Modal</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li>Plugin manifest: <code>.claude-plugin/plugin.json</code> with semantic version, keywords, commands, skills paths.</li>
+            <li>Version-cached marketplace distribution via <code>codex-cache-update</code> skill — the model can install and upgrade the plugin itself.</li>
+            <li>Cross-runtime packaging so Claude Code and Codex install the same artifact.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">Hooks / event-driven middleware</div>
+          <div class="source">All 9 JDs emphasize enforcement</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li>22 hook shell files implementing PreToolUse / PostToolUse / UserPromptSubmit / SessionStart / Stop / PreCompact semantics.</li>
+            <li>Worktree-guard: must-fail-closed on missing <code>jq</code>, hard-blocks Edit/Write outside a worktree.</li>
+            <li>Hook matrix SSOT at <code>hooks/index.md</code> — reviewable artifact, not scattered docs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">Multi-agent orchestration</div>
+          <div class="source">Sourcegraph Agent Eng IC4 · Cognition · Anthropic Claude Code</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li>Per-step sub-agent delegation via <code>build</code> + <code>build-tdd</code> skills; each step runs in its own agent with a handoff contract.</li>
+            <li><code>sub-agent-handoff</code> PostToolUse hook enforces STATUS / EVIDENCE / NEXT-ACTION template.</li>
+            <li>Multi-runtime dispatch — same orchestration runs under Claude Code or Codex.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">TDD / verification discipline</div>
+          <div class="source">All 9 JDs cite "no completion without evidence"</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li>Iron Law <strong>L1</strong>: no prod code without a verification artifact. <strong>L3</strong>: no completion claim without quoted exit code.</li>
+            <li>118 test files, ~40k LoC tests. <code>tdd-guard</code> hook fires during build stage.</li>
+            <li><code>stop-verify</code> Stop hook refuses to let the model declare "done" until the verification contract is satisfied.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">Documentation-as-product</div>
+          <div class="source">All 9 JDs require strong written communication</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li><code>CLAUDE.md</code> + <code>AGENTS.md</code> + per-rule <code>rules/</code> MD files form a SSOT hierarchy.</li>
+            <li>Iron Laws document is itself an enforce-the-discipline-by-writing-it artifact.</li>
+            <li>Proposals rendered as self-contained HTML for review (<code>render_proposal_html.py</code>).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">Eval / harness quality judgment</div>
+          <div class="source">Sourcegraph IC4 · LangChain · Anthropic</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li><code>evaluate</code> + <code>valuate</code> skills: rubric-driven verdicts over transcripts.</li>
+            <li><code>ci-triage</code> skill: case-store of past CI failures + adversarial reproduction requirement.</li>
+            <li>Adversarial verify pattern: spawn N independent reviewers per finding, kill if majority refute.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">CI / release engineering</div>
+          <div class="source">Sourcegraph · Cursor · Cloudflare · Modal</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li>GitHub Actions: review, security, ship, version-bump — separate YAML per concern.</li>
+            <li><code>review-yml-isolation</code> PreToolUse Bash hook: <code>review.yml</code> commits must contain only that file.</li>
+            <li>Multi-provider CI swap (<code>bin/set-provider.sh</code>) — same test suite runs under different LLM providers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cap reveal">
+        <div>
+          <div class="label">Token / cost efficiency</div>
+          <div class="source">All AI-tools companies run on tight compute budgets</div>
+        </div>
+        <div class="proof">
+          <ul>
+            <li><code>token-analyzer</code> skill: 4-dim session scoring, 6 anti-pattern warnings, USD savings estimate.</li>
+            <li><code>cost-gate</code> skill: budget enforcement before expensive operations.</li>
+            <li>Per-session cost dashboard rendered to HTML (<code>token-dashboard-dev-harness-kit-30d.html</code>).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Iron Laws ======================== -->
+<section>
+  <div class="container">
+    <div class="eyebrow">Iron Laws · the rules the model is forbidden to violate</div>
+    <h2>Eight invariants. Enforced by hooks, not prompts.</h2>
+    <p style="color: var(--fg-muted); margin-top: 14px; max-width: 68ch;">
+      <code>iron-laws/index.md</code> is the MUST-8 source of truth. The body just lists them — the
+      <em>enforcement</em> lives in the hooks, the state machine, and the test gates.
+    </p>
+
+    <div class="cap-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L1 — Verification artifact</div></div>
+        <div class="proof">No prod code without test/contract/domain/scenario/feature per methodology.</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L2 — Reproduce first</div></div>
+        <div class="proof">No fix without reproducing the bug (Phase 1 = reproduce).</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L3 — Quoted evidence</div></div>
+        <div class="proof">No completion claim without quoted exit code / test count / build log.</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L4 — No placeholders</div></div>
+        <div class="proof">No TODO / FIXME / "we'll extend later" / "this is a starting point".</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L5 — One answer</div></div>
+        <div class="proof">No option/alternative list when not asked. One answer.</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L6 — Skill alpha</div></div>
+        <div class="proof">New skills must declare <code>alpha: state | enforcement | analysis</code> in frontmatter.</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L7 — alpha = enforcement</div></div>
+        <div class="proof">A skill's alpha lives in parts the model can't self-impose.</div>
+      </div>
+      <div class="cap reveal" style="grid-template-columns: 1fr;">
+        <div><div class="label">L8 — Trim prose</div></div>
+        <div class="proof">Skill prompt prose that duplicates state-machine/hook/gate behavior must be trimmed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Stack with why ======================== -->
+<section id="stack">
+  <div class="container">
+    <div class="eyebrow">Stack — and the why</div>
+    <h2>I list tools only when I can defend the trade-off.</h2>
+    <div class="why-list">
+      <div class="why"><div class="stack">Python</div><div class="reason"><b>Default for the harness core.</b> <code>lib/</code> is mostly Python because hook output is JSON-shaped and Python's stdlib (`json`, `subprocess`, `pathlib`) is the cheapest match. Avoided for hot paths where I'd otherwise reach for C/Rust.</div></div>
+      <div class="why"><div class="stack">Bash</div><div class="reason"><b>For PreToolUse hooks.</b> The shell has to invoke <code>jq</code> anyway, so writing the hook itself in shell keeps the exit-code contract obvious. Python is used when the hook needs more than string manipulation.</div></div>
+      <div class="why"><div class="stack">jq</div><div class="reason"><b>Required runtime dependency.</b> Worktree-guard and stop-verify parse Claude Code's JSON hook input via <code>jq</code>. Both hooks fail closed when <code>jq</code> is missing — the design choice is "refuse to run" rather than "best-effort degrade".</div></div>
+      <div class="why"><div class="stack">GitHub Actions</div><div class="reason"><b>For CI shape.</b> Four workflows (review / security / ship / version-bump) — each one purpose. The version-bump workflow reads <code>.claude-plugin/plugin.json:version</code> at runtime, so a version bump requires zero constant churn.</div></div>
+      <div class="why"><div class="stack">pytest</div><div class="reason"><b>For the 118 test files.</b> Standard Python testing; the harness's stop-verify hook validates against pytest exit codes, not model judgment.</div></div>
+      <div class="why"><div class="stack">Markdown / Mermaid</div><div class="reason"><b>For documentation-as-product.</b> Iron laws, rules, and proposals are all MD. Mermaid for diagrams because it's plain-text diffable.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Recent milestones ======================== -->
+<section>
+  <div class="container">
+    <div class="eyebrow">Recent milestones</div>
+    <h2>What I've shipped this year.</h2>
+    <div class="timeline">
+      <div class="tl-item milestone"><div class="when">2026 · Q2</div><div class="what">Cross-runtime adapter layer</div><div class="detail">Same hooks fire under both Claude Code and Codex via <code>lib/runtime_adapters/</code>. Closes the "users have to pick" gap.</div></div>
+      <div class="tl-item"><div class="when">2026 · Q1</div><div class="what">Proposal skill renderer</div><div class="detail">Any <code>docs/proposals/&lt;main&gt;/&lt;sub&gt;.yaml</code> renders to a single self-contained HTML — used for design reviews with reviewers outside the codebase.</div></div>
+      <div class="tl-item milestone"><div class="when">2025 · Q4</div><div class="what">Iron Laws L6 — skill governance gate</div><div class="detail">Every new skill must declare <code>alpha: state | enforcement | analysis</code>; lint enforced by <code>tests/test_skill_governance.py</code>. Reasoning-only skills require PR-body justification.</div></div>
+      <div class="tl-item"><div class="when">2025 · Q3</div><div class="what">Multi-agent research harness</div><div class="detail">Phase-0..3 escalation (cache / direct / multi / human) + <code>enforce_citations()</code>. Every claim in a research output cites a URL or fails the gate.</div></div>
+      <div class="tl-item"><div class="when">2025 · Q2</div><div class="what">Token-analyzer + cost-gate</div><div class="detail">Per-session cost dashboard (cache-hit ratio, MODEL_OVERSPEC, REPEATED_USER_MSG, READ_HEAVY warnings). USD savings estimate.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== Contact ======================== -->
+<section id="contact">
+  <div class="container">
+    <div class="eyebrow">Contact</div>
+    <h2>Open to junior AI developer-tools roles.</h2>
+    <p style="color: var(--fg-muted); margin-top: 14px; max-width: 68ch;">
+      If you're hiring IC2 / entry-level on a plugin, SDK, agent infrastructure, or DevEx team — I'd love to talk. Lead with the role and the team's current biggest problem; I'll respond faster.
+    </p>
+    <div class="contact">
+      <a href="mailto:sanghee@example.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        <span>sanghee@example.com<small>preferred for roles</small></span>
+      </a>
+      <a href="https://github.com/sh-ai-x/dev-harness-kit" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.69-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.51-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.6.23 2.78.11 3.07.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.05.78 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span>github.com/sh-ai-x/dev-harness-kit<small>flagship repo · v0.3.239</small></span>
+      </a>
+      <a href="https://github.com/sanghee" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.69-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.51-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.6.23 2.78.11 3.07.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.05.78 2.12 0 1.53-.01 2.76-.01 3.14 0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span>github.com/sanghee<small>personal · contributions</small></span>
+      </a>
+      <a href="https://blog.sanghee.dev" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>blog.sanghee.dev<small>writing on plugin systems</small></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div>© <span id="year"></span> Sanghee Lee · Built with dev-harness-kit.</div>
+      <div class="print-hide">Single-file HTML · print-ready · accessible</div>
+    </div>
+    <p style="margin-top: 12px; font-size: 0.78rem;">Position analysis based on JDs from Sourcegraph, Anthropic, Replit, Cognition, LangChain, Modal, Cloudflare, Cursor, Continue.dev — scraped 2026-08-10.</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const root = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
+    const stored = localStorage.getItem('portfolio-theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let current = stored || (systemDark ? 'dark' : 'light');
+    function apply(theme) {
+      current = theme;
+      if (theme === 'auto') { root.removeAttribute('data-theme'); theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+      else { root.setAttribute('data-theme', theme); }
+      if (icon) {
+        icon.innerHTML = theme === 'dark'
+          ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'
+          : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+      }
+    }
+    apply(current);
+    btn && btn.addEventListener('click', () => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('portfolio-theme', next);
+      apply(next);
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('portfolio-theme')) apply(e.matches ? 'dark' : 'light');
+    });
+  })();
+  document.getElementById('year').textContent = new Date().getFullYear();
+  (function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('is-visible')); return; }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    els.forEach(el => io.observe(el));
+  })();
+</script>
+
+</body>
+</html>
