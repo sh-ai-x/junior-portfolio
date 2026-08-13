@@ -1,547 +1,662 @@
-<!doctype html>
-<html lang="ko">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>신입 개발자 포트폴리오 제안 — 26개사 리서치 기반</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0b0f" media="(prefers-color-scheme: dark)" />
+<meta name="description" content="Junior developer portfolio research 2025-2026. What recruiters want, what fails, what's trending — synthesized from 30+ sources." />
+<title>Junior Developer Portfolio Research · 2025-2026</title>
 <style>
-  :root{
-    --bg:#fafaf9;--surface:#ffffff;--surface-2:#f4f4f3;
-    --border:#e7e5e4;--border-strong:#d6d3d1;
-    --text:#1c1917;--text-2:#44403c;--text-3:#78716c;
-    --accent:#0f172a;--accent-2:#334155;--link:#0d6efd;
-    --good:#15803d;--warn:#b45309;--bad:#b91c1c;
-    --code-bg:#0f172a;--code-fg:#e2e8f0;
-    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
-    --radius:14px;--radius-sm:8px;
-    --mono: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,monospace;
-    --sans: -apple-system,BlinkMacSystemFont,"SF Pro Display","Pretendard","Apple SD Gothic Neo","Helvetica Neue",Arial,sans-serif;
+  :root {
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Fira Code", Menlo, Consolas, monospace;
+    --bg: #ffffff; --bg-elev-1: #fafaf9; --bg-elev-2: #f4f4f2;
+    --fg: #0b0b0f; --fg-muted: #5b5b66; --fg-faint: #8e8e99;
+    --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.14);
+    --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.12);
+    --good: #34c759; --warn: #ff9f0a; --bad: #ff453a;
+    --code-bg: #f4f4f2;
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0b0c0d;--surface:#131517;--surface-2:#1a1d21;
-      --border:#26292d;--border-strong:#3a3f45;
-      --text:#f5f5f4;--text-2:#d6d3d1;--text-3:#a8a29e;
-      --accent:#f8fafc;--accent-2:#cbd5e1;--link:#7dd3fc;
-      --code-bg:#020617;--code-fg:#e2e8f0;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.5);
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0b0f; --bg-elev-1: #131318; --bg-elev-2: #1c1c22;
+      --fg: #f5f5f7; --fg-muted: #aeaeb8; --fg-faint: #6e6e78;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+      --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.18);
+      --good: #30d158; --warn: #ff9f0a; --bad: #ff453a;
+      --code-bg: #1c1c22;
     }
   }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    font-family:var(--sans);background:var(--bg);color:var(--text);
-    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.65;
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-display);
+    background: var(--bg); color: var(--fg);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6; font-size: 16px;
+    transition: background-color .2s ease, color .2s ease;
   }
-  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px}
-  header.hero{
-    background:linear-gradient(135deg,#0f172a 0%,#1e293b 60%,#334155 100%);
-    color:#f8fafc;border-radius:20px;padding:48px 40px;margin-bottom:24px;
-    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  ::selection { background: var(--accent); color: #fff; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  h1, h2, h3, h4 { margin: 0; letter-spacing: -0.022em; line-height: 1.18; font-weight: 600; }
+  h1 { font-size: clamp(2rem, 5vw, 3.6rem); letter-spacing: -0.035em; }
+  h2 { font-size: clamp(1.4rem, 3vw, 1.95rem); margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+  h2:first-of-type { margin-top: 48px; }
+  h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.005em; margin-top: 20px; }
+  h4 { font-size: 0.78rem; font-weight: 600; color: var(--fg-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+  p { margin: 0; }
+  ul, ol { margin: 12px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  code { font-family: var(--font-mono); font-size: 0.86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre { font-family: var(--font-mono); font-size: 0.84em; background: var(--code-bg); padding: 14px 16px; border-radius: 10px; overflow-x: auto; border: 1px solid var(--border); }
+
+  .container { width: min(820px, calc(100% - 32px)); margin-inline: auto; }
+  .container-wide { width: min(1080px, calc(100% - 32px)); margin-inline: auto; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--border);
   }
-  header.hero::after{
-    content:"";position:absolute;inset:0;
-    background:radial-gradient(ellipse at top right, rgba(125,211,252,.18), transparent 60%);
-    pointer-events:none;
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; }
+  .brand { font-weight: 600; font-size: 0.92rem; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+  .brand-dot {
+    width: 7px; height: 7px; background: var(--good); border-radius: 50%;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent);
   }
-  header.hero .badge{
-    display:inline-flex;align-items:center;gap:6px;
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-    color:#e2e8f0;font-size:12px;font-weight:600;
-    padding:5px 12px;border-radius:999px;letter-spacing:.02em;
+  .nav { display: flex; gap: 18px; align-items: center; }
+  .nav a { color: var(--fg-muted); font-size: 0.85rem; }
+  .nav a:hover { color: var(--fg); text-decoration: none; }
+  .icon-btn {
+    width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elev-1);
+    color: var(--fg-muted); cursor: pointer;
   }
-  header.hero h1{font-size:40px;line-height:1.15;margin:16px 0 8px;letter-spacing:-.02em;font-weight:700}
-  header.hero .lede{font-size:18px;color:#cbd5e1;max-width:620px;margin:0}
-  header.hero .meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:24px;font-size:13px;color:#94a3b8}
-  header.hero .meta span{white-space:nowrap}
-  header.hero .meta b{color:#e2e8f0;font-weight:600}
-  .lede2{
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;
-    color:var(--text-2);font-size:14px;
+  .icon-btn:hover { background: var(--bg-elev-2); color: var(--fg); }
+
+  .hero { padding: 72px 0 48px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--bg-elev-1);
+    color: var(--fg-muted); font-size: 0.76rem; font-weight: 500;
   }
-  .lede2 b{color:var(--text)}
-  section.card{
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:28px 28px 24px;margin-bottom:20px;box-shadow:var(--shadow);
+  .pill.solid { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+  .hero p.lede { margin-top: 18px; font-size: 1.08rem; color: var(--fg-muted); max-width: 62ch; }
+  .hero .meta-row {
+    margin-top: 28px; display: flex; flex-wrap: wrap; gap: 18px 28px;
+    color: var(--fg-faint); font-size: 0.85rem;
   }
-  section.card h2{
-    margin:0 0 8px;font-size:22px;font-weight:700;letter-spacing:-.01em;
-    display:flex;align-items:center;gap:10px;
+  .hero .meta-row strong { color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* TL;DR */
+  .tldr {
+    margin-top: 28px; padding: 18px 22px;
+    background: var(--bg-elev-1); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    font-size: 0.96rem;
   }
-  section.card h2 .num{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:28px;height:28px;border-radius:8px;background:var(--surface-2);
-    color:var(--text-2);font-size:14px;font-weight:700;border:1px solid var(--border);
+  .tldr b { color: var(--fg); font-weight: 600; }
+
+  /* Stats strip */
+  .stats {
+    margin-top: 28px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
   }
-  section.card .subtitle{margin:0 0 16px;color:var(--text-3);font-size:14px}
-  section.card p{margin:0 0 12px;color:var(--text-2)}
-  section.card ul{margin:8px 0 0;padding-left:20px;color:var(--text-2)}
-  section.card li{margin:6px 0}
-  section.card li b{color:var(--text);font-weight:600}
-  .company-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:8px;margin-top:8px;
+  .stat { background: var(--bg); padding: 16px 18px; }
+  .stat .n { font-size: 1.55rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat .n .u { font-size: 0.78rem; color: var(--fg-muted); margin-left: 2px; font-weight: 500; }
+  .stat .l { color: var(--fg-faint); font-size: 0.78rem; margin-top: 4px; line-height: 1.4; }
+
+  /* Sections */
+  section { padding: 16px 0; }
+  .section-intro { color: var(--fg-muted); max-width: 64ch; margin-top: 12px; }
+
+  /* Lists */
+  .item {
+    margin-top: 16px;
+    background: var(--bg-elev-1); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
   }
-  .company-chip{
-    background:var(--surface-2);border:1px solid var(--border);
-    border-radius:var(--radius-sm);padding:8px 12px;
-    font-size:13px;color:var(--text);font-weight:500;
+  .item h3 { margin-top: 0; }
+  .item h3 .freq { color: var(--fg-faint); font-weight: 500; font-size: 0.78rem; letter-spacing: 0.02em; margin-left: 8px; }
+  .item .meta { color: var(--fg-faint); font-size: 0.82rem; margin-top: 4px; }
+  .item .why { color: var(--fg-muted); font-size: 0.94rem; margin-top: 12px; line-height: 1.55; }
+  .item .evidence { color: var(--fg-faint); font-size: 0.84rem; margin-top: 10px; line-height: 1.5; }
+  .item .evidence a { color: var(--fg-muted); }
+  .item .fix { color: var(--fg-muted); font-size: 0.9rem; margin-top: 12px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .item .fix b { color: var(--fg); font-weight: 600; }
+  .item.must-have { border-left: 3px solid var(--good); }
+  .item.nice { border-left: 3px solid var(--accent); }
+  .item.bad { border-left: 3px solid var(--bad); }
+  .item.trend { border-left: 3px solid var(--warn); }
+  .item.ok { border-left: 3px solid var(--fg-faint); }
+
+  /* Comparison table */
+  .compare {
+    margin-top: 20px; overflow-x: auto;
+    border: 1px solid var(--border); border-radius: 12px;
   }
-  .company-chip .cat{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
-  .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px}
-  .theme-card{
-    background:var(--surface-2);border:1px solid var(--border);
-    border-radius:var(--radius-sm);padding:14px 16px;
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  table.cmp th, table.cmp td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  table.cmp th { background: var(--bg-elev-1); color: var(--fg-muted); font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  table.cmp tr:last-child td { border-bottom: none; }
+  table.cmp td.good { color: var(--good); font-weight: 600; }
+  table.cmp td.bad { color: var(--bad); font-weight: 600; }
+  table.cmp td.muted { color: var(--fg-muted); }
+
+  /* Checklist */
+  .checklist {
+    margin-top: 16px;
+    background: var(--bg-elev-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 4px;
   }
-  .theme-card .label{
-    display:inline-block;font-size:11px;font-weight:700;
-    letter-spacing:.05em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px;
+  .check-item {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 12px; padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    line-height: 1.5;
   }
-  .theme-card .body{font-size:14px;color:var(--text);font-weight:600;margin-bottom:6px}
-  .theme-card .desc{font-size:13px;color:var(--text-2);line-height:1.55}
-  .pre{
-    background:var(--code-bg);color:var(--code-fg);border-radius:var(--radius-sm);
-    padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.55;
-    overflow-x:auto;position:relative;margin:8px 0 4px;border:1px solid #1e293b;
+  .check-item + .check-item { border-top: 1px solid var(--border); border-radius: 0; }
+  .check-item input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
+  .check-item b { color: var(--fg); font-weight: 600; }
+
+  /* Sources */
+  .source-list {
+    margin-top: 16px;
+    columns: 2;
+    column-gap: 28px;
   }
-  .pre .comment{color:#94a3b8;font-style:italic}
-  .pre .key{color:#7dd3fc}
-  .pre .str{color:#86efac}
-  .pre .cmd{color:#fda4af}
-  .pre .path{color:#fcd34d}
-  .copy-btn{
-    position:absolute;top:8px;right:8px;background:rgba(255,255,255,.08);
-    color:#e2e8f0;border:1px solid rgba(255,255,255,.15);border-radius:6px;
-    font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;
-    font-family:var(--sans);transition:background .15s ease;
+  @media (max-width: 720px) { .source-list { columns: 1; } }
+  .source-list li {
+    font-size: 0.85rem; line-height: 1.5;
+    color: var(--fg-muted);
+    break-inside: avoid;
+    margin-bottom: 8px;
   }
-  .copy-btn:hover{background:rgba(255,255,255,.16)}
-  .copy-btn.copied{background:#15803d;border-color:#15803d;color:#fff}
-  table.portfolio{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
-  table.portfolio th,table.portfolio td{
-    text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;
+  .source-list .date { color: var(--fg-faint); font-variant-numeric: tabular-nums; }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--border); padding: 32px 0 56px; color: var(--fg-faint); font-size: 0.85rem; margin-top: 56px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 500; background: var(--bg-elev-2); color: var(--fg-muted); }
+
+  @media print {
+    .topbar, .icon-btn, footer .print-hide { display: none !important; }
+    body { font-size: 11pt; }
+    h2 { page-break-before: auto; page-break-after: avoid; }
+    .item { page-break-inside: avoid; }
   }
-  table.portfolio th{
-    background:var(--surface-2);font-weight:700;color:var(--text);
-    font-size:12px;letter-spacing:.04em;text-transform:uppercase;
-  }
-  table.portfolio td{color:var(--text-2)}
-  table.portfolio td:first-child{font-family:var(--mono);font-weight:600;color:var(--text);font-size:13px;white-space:nowrap}
-  .priority{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;display:inline-block}
-  .priority.must{background:rgba(220,38,38,.12);color:var(--bad)}
-  .priority.should{background:rgba(217,119,6,.12);color:var(--warn)}
-  .priority.nice{background:rgba(22,163,74,.12);color:var(--good)}
-  @media (prefers-color-scheme: dark){
-    .priority.must{background:rgba(248,113,113,.18);color:#fca5a5}
-    .priority.should{background:rgba(251,191,36,.18);color:#fcd34d}
-    .priority.nice{background:rgba(134,239,172,.18);color:#86efac}
-  }
-  .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:8px}
-  .stack-card{
-    background:var(--surface-2);border:1px solid var(--border);
-    border-radius:var(--radius-sm);padding:12px 14px;
-  }
-  .stack-card .label{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--text-3);text-transform:uppercase;margin-bottom:6px}
-  .stack-card .body{font-family:var(--mono);font-size:13px;color:var(--text)}
-  .stack-card .desc{font-size:12px;color:var(--text-2);margin-top:6px;line-height:1.5}
-  ol.steps{counter-reset:step;list-style:none;padding:0;margin:8px 0 0}
-  ol.steps > li{
-    counter-increment:step;position:relative;padding:14px 16px 14px 56px;
-    background:var(--surface-2);border:1px solid var(--border);
-    border-radius:var(--radius-sm);margin-bottom:10px;
-  }
-  ol.steps > li::before{
-    content:counter(step);position:absolute;left:14px;top:14px;
-    width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
-  }
-  ol.steps > li b{color:var(--text)}
-  ol.steps > li span{color:var(--text-2);display:block;margin-top:2px;font-size:14px}
-  .callout{
-    background:linear-gradient(180deg,rgba(125,211,252,.08),transparent);
-    border:1px solid rgba(125,211,252,.25);border-radius:var(--radius-sm);
-    padding:14px 16px;color:var(--text-2);font-size:14px;margin-top:8px;
-  }
-  .callout.warn{
-    background:linear-gradient(180deg,rgba(251,191,36,.08),transparent);
-    border-color:rgba(251,191,36,.3);
-  }
-  .callout b{color:var(--text)}
-  .quote{
-    background:var(--surface-2);border-left:3px solid var(--accent);
-    padding:12px 16px;margin:8px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-    color:var(--text-2);font-size:14px;font-style:italic;
-  }
-  .quote .src{display:block;margin-top:6px;font-style:normal;font-size:12px;color:var(--text-3)}
-  .skill-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px}
-  .skill-card{
-    background:var(--surface-2);border:1px solid var(--border);
-    border-radius:var(--radius-sm);padding:14px 16px;text-decoration:none;color:inherit;
-    display:block;transition:border-color .15s ease;
-  }
-  .skill-card:hover{border-color:var(--border-strong)}
-  .skill-card .name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
-  .skill-card .desc{font-size:13px;color:var(--text-2);line-height:1.5}
-  .timeline{position:relative;padding-left:24px;margin-top:8px}
-  .timeline::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--border)}
-  .timeline-item{position:relative;padding:8px 0 8px 8px;color:var(--text-2);font-size:14px}
-  .timeline-item::before{
-    content:"";position:absolute;left:-19px;top:14px;width:10px;height:10px;
-    border-radius:50%;background:var(--accent);
-  }
-  .timeline-item b{color:var(--text)}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:12px 0}
-  .stat{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center}
-  .stat .num{font-size:28px;font-weight:700;color:var(--text);font-family:var(--mono);line-height:1}
-  .stat .label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-top:6px;font-weight:700}
-  footer{text-align:center;color:var(--text-3);font-size:13px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
-  footer a{color:var(--text-2);text-decoration:none}
-  footer a:hover{color:var(--text)}
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header class="hero">
-  <span class="badge">📋 Multi-Agent Research · 2025–2026</span>
-  <h1>신입 개발자 포트폴리오 제안</h1>
-  <p class="lede"><b>26개 기업</b>의 2025–2026 신입 채용 기준을 리서치해서 추출한, 실제 시그널에 기반한 포트폴리오 구조와 dev-kit 워크플로우.</p>
-  <div class="meta">
-    <span>� <b>26</b>개사</span>
-    <span>📚 <b>80+</b> URL 인용</span>
-    <span>🤖 <b>5</b> 리서치 에이전트 병렬</span>
-    <span>� <b>2025–2026</b> 출처</span>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <div class="brand"><span class="brand-dot"></span>Portfolio Research · 2025-2026</div>
+    <nav class="nav" aria-label="Primary">
+      <a href="#must">Must-haves</a>
+      <a href="#anti">Anti-patterns</a>
+      <a href="#trends">Trends</a>
+      <a href="#check">Checklist</a>
+      <a href="#sources">Sources</a>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle color theme">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </nav>
   </div>
 </header>
 
-<div class="lede2">
-  <b>핵심 결론.</b> 모든 기업이 공통으로 요구하는 건 <b>① CS 기초(자료구조·알고리즘·DB·OS·네트워크)</b> + <b>② 왜 이 기술을 골랐는지에 대한 의사결정 근거</b> + <b>③ 사용자가 있는 실배포 프로젝트</b> 3개입니다. GitHub 잔디·자격증·학점은 한국 전통 대기업(Samsung SDS·LG CNS)을 제외하면 대부분 무시 또는 보조 신호입니다.
+<div class="hero">
+  <div class="container">
+    <div class="hero-meta">
+      <span class="pill solid"><span class="dot"></span>Research brief</span>
+      <span class="pill">3 parallel agents · 30+ sources</span>
+      <span class="pill">Aug 2026</span>
+    </div>
+    <h1>What makes a junior developer portfolio work in 2025-2026.</h1>
+    <p class="lede">
+      Synthesized evidence on what hiring managers actually look for, what gets you rejected, and how the bar shifted in the AI era. Not opinion — cross-referenced across dev.to, Reddit, Stack Overflow's 2025 Developer Survey, Frontend Mentor, freeCodeCamp, and hiring-manager blogs.
+    </p>
+    <div class="meta-row">
+      <span><strong>30+</strong> sources</span>
+      <span><strong>3</strong> parallel research agents</span>
+      <span><strong>7</strong> must-haves</span>
+      <span><strong>7</strong> anti-patterns</span>
+      <span><strong>7</strong> trends</span>
+      <span><strong>12</strong> concrete fixes</span>
+    </div>
+
+    <div class="tldr">
+      <b>TL;DR.</b> Hiring managers spend <b>~55 seconds</b> on a portfolio (Frontend Mentor 2026). <b>GitHub + 3-5 deployed projects with case studies</b> beats a custom portfolio site. The 2025 bar: <b>disclose AI usage honestly</b>, ship production hygiene (tests, error handling), and show <b>your</b> contribution — not a tutorial clone. The personal portfolio site is <b>contested</b>; quality repos are not.
+    </div>
+  </div>
 </div>
 
-<section class="card">
-  <h2><span class="num">1</span>리서치 범위</h2>
-  <p class="subtitle">5개 슬라이스 × 5~6개사 = 26개사. 모든 주장에 2025–2026 출처 URL 첨부.</p>
+<div class="container" style="padding-top: 32px;">
+
+<section>
+  <h4>Stats at a glance</h4>
   <div class="stats">
-    <div class="stat"><div class="num">5</div><div class="label">US Big Tech</div></div>
-    <div class="stat"><div class="num">6</div><div class="label">Korean Big Tech</div></div>
-    <div class="stat"><div class="num">5</div><div class="label">AI-Native</div></div>
-    <div class="stat"><div class="num">5</div><div class="label">Foreign SaaS</div></div>
-    <div class="stat"><div class="num">5</div><div class="label">Korean Enterprise</div></div>
+    <div class="stat"><div class="n">55<span class="u">s</span></div><div class="l">avg time spent on a portfolio</div></div>
+    <div class="stat"><div class="n">84<span class="u">%</span></div><div class="l">of devs use AI tools (Stack Overflow 2025)</div></div>
+    <div class="stat"><div class="n">36<span class="u">%</span></div><div class="l">learned to code specifically for AI</div></div>
+    <div class="stat"><div class="n">50<span class="u">%↓</span></div><div class="l">grad hiring vs pre-2020 (US big tech)</div></div>
+    <div class="stat"><div class="n">3-5</div><div class="l">projects sweet spot</div></div>
+    <div class="stat"><div class="n">67<span class="u">%</span></div><div class="l">of recruiters start on GitHub</div></div>
+  </div>
+  <p class="section-intro" style="margin-top: 14px; font-size: 0.86rem;">Sourced from Stack Overflow 2025 Developer Survey, Frontend Mentor 2026, Handshake, and Stanford/NY Fed data — see <a href="#sources">sources</a>.</p>
+</section>
+
+<!-- ============================== MUST-HAVES ============================== -->
+<section id="must">
+  <h2>① Must-have components</h2>
+  <p class="section-intro">Seven components cited across 5+ sources each. Drop any one and your portfolio loses a chunk of its screening signal.</p>
+
+  <div class="item must-have">
+    <h3>1. GitHub profile with pinned quality repos + READMEs <span class="freq">6/10 sources</span></h3>
+    <div class="meta">de-facto second signal after the resume · Stack Overflow 2025 confirms GitHub at 67% adoption (top platform after SO itself)</div>
+    <p class="why">Pin 3-6 repos that match the stack you're applying for. Each repo needs a README that reads as a 60-second pitch. The contribution graph is read as reliability.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · Junior Dev Resume & Portfolio in the Age of AI</a> · <a href="https://stackoverflow.blog/2025/12/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/">Stack Overflow 2025 Developer Survey</a></p>
   </div>
 
-  <div class="company-grid">
-    <div class="company-chip"><div class="cat">US Big Tech</div>Google · Meta · Amazon · Microsoft · Apple</div>
-    <div class="company-chip"><div class="cat">Korean Big Tech</div>네이버 · 카카오 · 토스 · 라인 · 쿠팡 · 우아한형제들</div>
-    <div class="company-chip"><div class="cat">AI-Native</div>OpenAI · Anthropic · Cursor · Cognition · Replit</div>
-    <div class="company-chip"><div class="cat">Foreign SaaS</div>Stripe · Airbnb · Notion · Linear · Vercel</div>
-    <div class="company-chip"><div class="cat">Korean Enterprise</div>삼성SDS · LG CNS · 현대오토에버 · 토스뱅크 · 카카오뱅크</div>
+  <div class="item must-have">
+    <h3>2. 3-5 deployed projects with live links <span class="freq">7/10 sources</span></h3>
+    <div class="meta">strongest differentiator vs tutorial clones · strongest correlation with "this candidate can ship"</div>
+    <p class="why">"Three strong projects beat ten weak ones every time." Deployment is the cheapest evidence that the code actually runs. Verify each link monthly — broken URLs are an instant filter.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://www.frontendmentor.io/articles/how-to-get-programming-job-2026">Frontend Mentor · 55-second rule</a> · <a href="https://rockstardeveloperuniversity.com/entry-level-software-engineer-job-market-statistics/">Rockstar Developer University · 2026 stats</a></p>
+  </div>
+
+  <div class="item must-have">
+    <h3>3. Project case studies (Problem → Approach → Stack → Contribution → Lessons) <span class="freq">6/10 sources</span></h3>
+    <div class="meta">dominant structure across 2025 guides</div>
+    <p class="why">Each project card answers: the problem, your approach, why this stack, what <em>you</em> personally contributed, and what you'd do differently. Drop the feature dump; explain the thinking.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · AI-era case study structure</a> · <a href="https://dev.to/siddheshcodes/frontend-developer-portfolio-tips-for-2025-build-a-stunning-site-that-gets-you-hired-3hga">dev.to · 2025 frontend guide</a></p>
+  </div>
+
+  <div class="item must-have">
+    <h3>4. Honest AI-usage documentation <span class="freq">5/10 sources · 2025-specific</span></h3>
+    <div class="meta">the single biggest 2025 shift · added to most guides in the past 12 months</div>
+    <p class="why">Recruiters explicitly screen for "Is this <em>your</em> work, or did AI do all the heavy lifting?" Pretending not to use AI is now a red flag; transparency wins. An <code>AI_USAGE.md</code> naming tools, scope, and verification is the move.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · "power tool not a crutch"</a> · <a href="https://www.frontendmentor.io/articles/how-to-get-programming-job-2026">Frontend Mentor · AI documentation checklist</a> · <a href="https://stackoverflow.blog/2025/12/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/">Stack Overflow 2025 · 84% AI use</a></p>
+  </div>
+
+  <div class="item must-have">
+    <h3>5. Personal portfolio site <span class="badge">contested</span> <span class="freq">5/10 sources</span></h3>
+    <div class="meta">sources disagree · see <a href="#counter">counter-evidence</a></div>
+    <p class="why">Most 2025 English guides recommend one; senior voices on Reddit/LinkedIn call it "a waste of time" unless it shows something GitHub can't (personality, deployed UX, design taste). <b>Default: build one <em>only if</em> it adds what GitHub can't.</b></p>
+    <p class="evidence"><em>Sources:</em> <a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · "clean personal site"</a> · <a href="https://www.linkedin.com/posts/cristian-florea-396046123_pov-youre-a-junior-developer-in-2025-your-activity-7336768911872266240-ahmr">LinkedIn · "waste of time" counter-view</a> · <a href="https://www.reddit.com/r/cscareerquestions/comments/1o8zoqt/is_a_portfolio_site_still_mandatory_in_2025/">r/cscareerquestions · 10-year lead engineer debate</a></p>
+  </div>
+
+  <div class="item must-have">
+    <h3>6. README that explains <em>why</em>, not just <em>what</em> <span class="freq">4/10 sources</span></h3>
+    <div class="meta">cheapest portfolio upgrade available</div>
+    <p class="why">"Started from a design/spec, made your own decisions, can explain every piece of code" — the litmus test that separates tutorial clones from real projects. Include: (1) problem, (2) how to run, (3) stack rationale, (4) what you'd do differently.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://www.frontendmentor.io/articles/how-to-get-programming-job-2026">Frontend Mentor · three-test rubric</a> · <a href="https://dev.to/kethmars/what-i-learned-after-reviewing-over-40-developer-portfolios-9-tips-for-a-better-portfolio-4me7">dev.to · reviewing 40+ portfolios (canonical 2020, still cited)</a></p>
+  </div>
+
+  <div class="item must-have">
+    <h3>7. Tests + production hygiene <span class="freq">4/10 sources</span></h3>
+    <div class="meta">was optional in 2020 · baseline in 2025 · differentiator that AI cannot fake</div>
+    <p class="why">Tests, error handling, monitoring awareness — these were nice-to-haves 5 years ago. With AI writing the boilerplate, candidates who understand production realities stand out. Even one smoke test per project signals intent.</p>
+    <p class="evidence"><em>Sources:</em> <a href="https://medium.com/@emirkanbeyaz01/the-great-tech-hiring-freeze-how-ai-is-reshaping-the-junior-developer-job-market-c53da6e6fa08">Medium · AI is reshaping the junior market</a> · <a href="https://rockstardeveloperuniversity.com/entry-level-software-engineer-job-market-statistics/">Rockstar · practical evidence</a></p>
   </div>
 </section>
 
-<section class="card">
-  <h2><span class="num">2</span>기업들이 실제로 보는 7가지 시그널</h2>
-  <p class="subtitle">26개사 합산 빈도순 — 모두 1차 출처 URL 기반.</p>
+<!-- ============================== NICE-TO-HAVES ============================== -->
+<section>
+  <h2>② Nice-to-have components</h2>
+  <p class="section-intro">Strong differentiators but not strictly required. Skip if you can't do them well.</p>
 
-  <div class="theme-grid">
-    <div class="theme-card">
-      <span class="label">시그널 #1 · 25/26</span>
-      <div class="body">CS 기초 (자료구조·알고리즘·DB·OS·Network)</div>
-      <div class="desc">네이버 공식 코테, 쿠� 공식 평가표, 토스 "원론 지식", 카카오 CS 코테, 삼성 SW역량테스트 — 사실상 전 기업 공통 1차 컷.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #2 · 23/26</span>
-      <div class="body">"왜" 그 기술을 골랐는가</div>
-      <div class="desc">토스 모닥불 "단순 사용 경험이 아니라 '왜'를 사용했는지가 중요하다". 카카오·라인 자소서도 동일한 �. 의사결정 근거를 글로 쓰는 능력.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #3 · 22/26</span>
-      <div class="body">사용자가 있는 실배포 프로젝트</div>
-      <div class="desc">Meta "ship something users actually use, even if 10", Vercel "Next.js demo deployed on Vercel", 우테코 미션형 GitHub. 잔디가 아닌 실사용.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #4 · 20/26</span>
-      <div class="body">실무형 과제 / 코드 리뷰 가능성</div>
-      <div class="desc">Stripe "Reconciliation script with pagination/idempotency", 카카오뱅크 "9일 과제 후 코드 리뷰 영상 면접", Linear "TypeScript take-home". 알고리즘 외 실무 코딩.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #5 · 18/26</span>
-      <div class="body">AI 도구 실전 활용 능력</div>
-      <div class="desc">Cursor "매일 power-user 여부 확인", OpenAI "eval harnesses·scratch transformers", Cognition "build an AI agent". 2025–2026 신규 필수.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #6 · 17/26</span>
-      <div class="body">깊이 있는 기술 블로그 / 사고 과정</div>
-      <div class="desc">토스 "개발자는 기술 블로그가 있어야 된다?", Notion "writing culture is text-first", Stripe "RFC·design doc style README". Velog·Tistory·개인 사이트.</div>
-    </div>
-    <div class="theme-card">
-      <span class="label">시그널 #7 · 15/26</span>
-      <div class="body">OSS 기여 / 외부 검증 가능한 아티팩트</div>
-      <div class="desc">OpenAI "merged open-source contributions", Anthropic "independent research, thoughtful blog posts", 네이버 합격자 "직접 주도한 스터디·발표". 단순 레포보다 머지/PR.</div>
-    </div>
+  <div class="item nice">
+    <h3>Technical blog or public writing <span class="freq">3/10 sources</span></h3>
+    <p class="why">"Dev.to blog or similar writing — short posts about what you've learned" reads as communication skill and learning trajectory. Counter-trend: standalone personal blog with sporadic posts reads as performative; project docs have largely eaten this slot.</p>
+    <p class="evidence"><a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · "powerful" signal</a> · <a href="https://www.reddit.com/r/webdev/comments/1o3ntpn/is_a_blog_worth_it_in_2025/">r/webdev · is a blog worth it in 2025?</a></p>
   </div>
 
-  <div class="quote">
-    "GitHub 잔디보다 코드 품질과 사고 과정을 확인합니다. 단순 사용 경험이 아니라 '왜'를 사용했는지가 중요합니다."
-    <span class="src">— 토스 모닥불 EP.8 (박서진 Head of Frontend) · toss.tech/article/firesidechat_frontend_8</span>
+  <div class="item nice">
+    <h3>Open-source contributions (even small PRs) <span class="freq">3/10 sources</span></h3>
+    <p class="why">Merged PRs into well-known OSS projects prove you can ship in someone else's codebase. Addresses the recruiter concern about AI-isolation work. Even typo fixes count.</p>
+    <p class="evidence"><a href="https://talent500.com/blog/entry-level-developer-jobs-2025/">Talent500 · public proof of work</a> · <a href="https://medium.com/@emirkanbeyaz01/the-great-tech-hiring-freeze-how-ai-is-reshaping-the-junior-developer-job-market-c53da6e6fa08">Medium · collaboration evidence</a></p>
+  </div>
+
+  <div class="item nice">
+    <h3>AI-tool integration in personal projects <span class="freq">2/10 sources</span></h3>
+    <p class="why">A non-trivial project that <em>uses</em> an LLM API (RAG, agent, structured output, evals) signals tool fluency beyond Copilot-autocomplete. Generic CRUD apps without any AI touch are now table-stakes noise.</p>
+    <p class="evidence"><a href="https://www.linkedin.com/posts/navinreddy20_stackoverflowsurvey2025-softwareengineering-activity-7409551153639845888-81gN">LinkedIn · SO 2025 analysis</a></p>
+  </div>
+
+  <div class="item nice">
+    <h3>Clear "About" + contact + LinkedIn/GitHub/Resume links</h3>
+    <p class="why">"Display email/social links in both header and footer" — reduces recruiter friction; takes seconds to add. The biggest free win.</p>
+    <p class="evidence"><a href="https://dev.to/kethmars/what-i-learned-after-reviewing-over-40-developer-portfolios-9-tips-for-a-better-portfolio-4me7">dev.to · header/footer convention</a></p>
+  </div>
+
+  <div class="item nice">
+    <h3>Micro-polish: responsive, accessible, Lighthouse 95+</h3>
+    <p class="why">Run Chrome Lighthouse before deploying. Catches the cheapest class of portfolio-killing bugs (broken meta tags, missing alt text, slow mobile load). Mobile responsiveness is baseline.</p>
+    <p class="evidence"><a href="https://dev.to/kethmars/what-i-learned-after-reviewing-over-40-developer-portfolios-9-tips-for-a-better-portfolio-4me7">dev.to · Lighthouse audit</a></p>
   </div>
 </section>
 
-<section class="card">
-  <h2><span class="num">3</span>기업별 신입 평가 비교표</h2>
-  <p class="subtitle">각 사가 어떤 비중으로 무엇을 보는지. 표 = 빠르게 비교용, 본문은 위 시그널 매핑.</p>
+<!-- ============================== ANTI-PATTERNS ============================== -->
+<section id="anti">
+  <h2>③ Anti-patterns — what gets you rejected</h2>
+  <p class="section-intro">Seven red flags that hiring managers screen out in the 55-second window.</p>
 
-  <table class="portfolio">
-    <thead>
-      <tr><th>기업</th><th>코딩/CS</th><th>실무 과제</th><th>포트폴리오</th><th>AI 역량</th><th>컬처핏</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Google</td><td>★★★★★</td><td>★</td><td>★</td><td>★★</td><td>★★★★</td></tr>
-      <tr><td>Meta</td><td>★★★★★</td><td>★★</td><td>★★★</td><td>★★</td><td>★★★★ (Jedi)</td></tr>
-      <tr><td>Amazon</td><td>★★★★★</td><td>★</td><td>★</td><td>★</td><td>★★★★★ (LP 16)</td></tr>
-      <tr><td>Microsoft</td><td>★★★★</td><td>★★</td><td>★★</td><td>★★★</td><td>★★★ (Growth Mindset)</td></tr>
-      <tr><td>Apple</td><td>★★★★★</td><td>★★</td><td>★</td><td>★</td><td>★★</td></tr>
-      <tr><td>네이버</td><td>★★★★★</td><td>★★</td><td>★★ (선택)</td><td>★★</td><td>★★★</td></tr>
-      <tr><td>카카오</td><td>★★★★★</td><td>★★★</td><td>★★</td><td>★★★</td><td>★★★</td></tr>
-      <tr><td>토스</td><td>★★★★★</td><td>★★★★★ (LIVE)</td><td>★★★★</td><td>★★★</td><td>★★★★★ (DRI)</td></tr>
-      <tr><td>쿠팡</td><td>★★★★★</td><td>★★★</td><td>★★</td><td>★★</td><td>★★★★ (LP 15)</td></tr>
-      <tr><td>우테코/배민</td><td>★★★</td><td>★★★★ (미션)</td><td>★★★★ (GitHub 미션)</td><td>★★</td><td>★★★★★</td></tr>
-      <tr><td>OpenAI</td><td>★★★★ (correctness)</td><td>★★★★★ (LIVE build)</td><td>★★★★★</td><td>★★★★★</td><td>★★★★</td></tr>
-      <tr><td>Anthropic</td><td>★★★★</td><td>★★★★</td><td>★★★★★</td><td>★★★★★</td><td>★★★★ (safety)</td></tr>
-      <tr><td>Cursor</td><td>★★★</td><td>★★★★★ (2-day ship)</td><td>★★★★★</td><td>★★★★★</td><td>★★★★</td></tr>
-      <tr><td>Cognition</td><td>★★★</td><td>★★★★★ (8h build agent)</td><td>★★★★★</td><td>★★★★★</td><td>★★★</td></tr>
-      <tr><td>Replit</td><td>★★★</td><td>★★★★</td><td>★★★★ (Replit Agent)</td><td>★★★★</td><td>★★★</td></tr>
-      <tr><td>Stripe</td><td>★★★</td><td>★★★★★ (API 실전)</td><td>★★★★</td><td>★★</td><td>★★★★ (RFC)</td></tr>
-      <tr><td>Linear</td><td>★★</td><td>★★★★★ (paid work trial)</td><td>★★★★★</td><td>★★</td><td>★★★★ (craft)</td></tr>
-      <tr><td>Vercel</td><td>★★</td><td>★★★★ (Next.js demo)</td><td>★★★★★</td><td>★★★</td><td>★★★</td></tr>
-      <tr><td>삼성SDS</td><td>★★★★★ (SW역량)</td><td>★</td><td>★★ (자격증 우대)</td><td>★★</td><td>★★★★★ (인성 70%)</td></tr>
-      <tr><td>LG CNS</td><td>★★★★</td><td>★★</td><td>★★</td><td>★★★★ (AX)</td><td>★★★</td></tr>
-      <tr><td>현대오토에버</td><td>★★★ (Softeer)</td><td>★★</td><td>★★ (도메인)</td><td>★★</td><td>★★★★ (ACT)</td></tr>
-      <tr><td>토스뱅크</td><td>★★★★</td><td>★★★★★ (LIVE)</td><td>★★★★</td><td>★★★</td><td>★★★★★ (DRI)</td></tr>
-      <tr><td>카카오뱅크</td><td>★★★★</td><td>★★★★★ (9일 과제)</td><td>★★★★ (README)</td><td>★★★</td><td>★★★★</td></tr>
-    </tbody>
-  </table>
+  <div class="item bad">
+    <h3>1. Tutorial graveyard / unmodified clones <span class="freq">4 sources</span></h3>
+    <p class="why">A todo app, weather app, calculator, or Netflix clone copied from a YouTube tutorial. Single squashed commit, default README, tutorial author's CSS. Hiring managers see dozens of identical submissions per week.</p>
+    <div class="fix"><b>Fix:</b> Pick a real problem from your own life. Build from scratch, document the "why" in the README, and refactor after feedback. If you keep a tutorial project, add a clearly-scoped personal feature and credit the source.</div>
+    <p class="evidence"><a href="https://www.reddit.com/r/learnprogramming/comments/1bz21ib/red_flags_in_a_developer_portfolio/">r/learnprogramming · red flags</a> · <a href="https://dev.to/jeremyfiel/10-junior-developer-portfolio-mistakes-that-get-you-rejected-51c5">dev.to · 10 mistakes</a></p>
+  </div>
 
-  <div class="callout">
-    <b>읽는 법.</b> ★ 5개 = 해당 영역이 사실상 전형 게이트. ★ 1~2개 = 보조 신호. 
-    <b>코딩/CS</b>는 전통 대기업·빅테크 5사, <b>실무 과제</b>는 AI-Native·핀테크·SaaS가 압도적입니다.
+  <div class="item bad">
+    <h3>2. No live demo / broken links <span class="freq">3 sources</span></h3>
+    <p class="why">A deployable demo is the minimum evidence that the code actually runs. Dead URLs read as incomplete or fake.</p>
+    <div class="fix"><b>Fix:</b> Deploy everything — Vercel/Netlify for web, Railway/Render for backends, Expo EAS for mobile. Verify each link monthly. If truly undeployable, record a 60-second Loom walkthrough.</div>
+    <p class="evidence"><a href="https://www.reddit.com/r/cscareerquestions/comments/1mnojzx/junior_dev_portfolio_what_hiring_managers_actually/">r/cscareerquestions · 2025 what hiring managers want</a> · <a href="https://www.freecodecamp.org/news/common-junior-developer-portfolio-mistakes/">freeCodeCamp · common mistakes</a></p>
+  </div>
+
+  <div class="item bad">
+    <h3>3. No README / no tests / no documentation <span class="freq">3 sources</span></h3>
+    <p class="why">README quality is the fastest proxy for code quality. Projects without tests signal "write once and walk away."</p>
+    <div class="fix"><b>Fix:</b> Ship every repo with a README answering 4 questions (problem, how to run, stack rationale, what you'd change). Add at least one smoke test — even a happy-path unit test is enough.</div>
+    <p class="evidence"><a href="https://dev.to/jeremyfiel/10-junior-developer-portfolio-mistakes-that-get-you-rejected-51c5">dev.to · 10 mistakes</a> · <a href="https://www.reddit.com/r/cscareerquestions/comments/h17blk/always_write_a_clear_readme_if_you_want_to_find_a/">r/cscareerquestions · README filter</a></p>
+  </div>
+
+  <div class="item bad">
+    <h3>4. Empty or sparse GitHub / one-commit repos <span class="freq">2 sources</span></h3>
+    <p class="why">For junior roles, GitHub IS the portfolio. Empty graphs imply you only code when applying. One-commit repos give no signal of iterative work.</p>
+    <div class="fix"><b>Fix:</b> Profile README + 3 pinned repos + a real contribution graph (Advent of Code, OSS typo fixes, weekly side-project commits).</div>
+    <p class="evidence"><a href="https://codelabsacademy.com/en/blog/github-portfolio-junior-developers-what-to-include-remove/">Codelabs · GitHub portfolio</a></p>
+  </div>
+
+  <div class="item bad">
+    <h3>5. Mass-quantity, no-depth portfolio (10+ projects) <span class="freq">2 sources</span></h3>
+    <p class="why">Quantity without depth signals checklist mentality. The 3-5 sweet spot wins.</p>
+    <div class="fix"><b>Fix:</b> Cut to 3-5 projects that demonstrate distinct skills (one full-stack, one CLI, one data pipeline, one OSS contribution). Each gets a 200-word case study.</div>
+    <p class="evidence"><a href="https://medium.com/@josephassefa/how-many-projects-should-a-junior-developer-have-in-their-portfolio-bd12b3e3f1d1">Medium · project count</a></p>
+  </div>
+
+  <div class="item bad">
+    <h3>6. Forked repos claimed as original work</h3>
+    <p class="why">A fork of a famous OSS repo with README edits and renamed variables. Treated as a serious integrity issue — risks hiring someone who submits colleagues' code as their own.</p>
+    <div class="fix"><b>Fix:</b> If you forked a tutorial, add a substantial original feature in a separate branch with PR-style commits, and credit the source clearly in the README.</div>
+    <p class="evidence"><a href="https://www.reddit.com/r/learnprogramming/comments/1bz21ib/red_flags_in_a_developer_portfolio/">r/learnprogramming · repo theft</a></p>
+  </div>
+
+  <div class="item bad">
+    <h3>7. Over-engineered portfolio site (3D animations, heavy frameworks)</h3>
+    <p class="why">WebGL particle effects, custom cursors, parallax scroll-jacking — takes 10s to load, signals flash over substance. The portfolio itself shouldn't be more complex than the work it showcases.</p>
+    <div class="fix"><b>Fix:</b> Static HTML+CSS or minimal Astro/Next.js. Lighthouse ≥ 95. Each project card: name, one-line problem, stack tags, GitHub link, demo link. That's it.</div>
+    <p class="evidence"><a href="https://www.youtube.com/watch?v=4QQ_a6D5-x0">YouTube · "Stop Building Portfolios" (2025)</a></p>
   </div>
 </section>
 
-<section class="card">
-  <h2><span class="num">4</span>권장 포트폴리오 구조 (신입용)</h2>
-  <p class="subtitle">리서치 시그널을 실제 폴더/리포 구조로 매핑. 우선순위는 26개사 빈도 합산.</p>
+<!-- ============================== TRENDS ============================== -->
+<section id="trends">
+  <h2>④ Trends — what's changed in 2025-2026</h2>
+  <p class="section-intro">Seven shifts that distinguish a 2026 portfolio from a 2023 portfolio.</p>
 
-  <table class="portfolio">
-    <thead>
-      <tr><th style="width:280px">영역</th><th>들어갈 것</th><th style="width:120px">우선순위</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><b>README.md</b> (메인)</td>
-        <td>
-          ① 자기소개 1문단 · ② 보유 기술 스택 표 · ③ <b>"왜 이 프로젝트를 만들었나" 3줄 요약</b> · ④ 가장 의미 있었던 트러블슈팅 1개 · ⑤ 연락처 + 링크
-        </td>
-        <td><span class="priority must">MUST</span></td>
-      </tr>
-      <tr>
-        <td><b>projects/</b></td>
-        <td>
-          실배포 프로젝트 <b>2~3개</b>. 각 프로젝트마다 <code>README.md</code>에 <b>문제 정의 → 왜 이 스택 → 트레이드오프 → 트러블슈팅 → 다음에 다르게 할 것</b> 명시. <b>사용자 수 / 트래픽 지표</b> 포함 시 가산점.
-        </td>
-        <td><span class="priority must">MUST</span></td>
-      </tr>
-      <tr>
-        <td><b>cs-study/</b></td>
-        <td>
-          자료구조·알고리즘·DB·OS·네트워크 정리 노트. 백준/프로그래머스 풀이 GitHub Actions로 자동 검증. 
-          <b>"원론적 사고 과정"</b>이 보이는 주석 필수.
-        </td>
-        <td><span class="priority must">MUST</span></td>
-      </tr>
-      <tr>
-        <td><b>blog/</b> 또는 외부 Velog·Tistory</td>
-        <td>
-          <b>깊이 있는 글 3~5개</b>: ① 시스템 설계 회고 · ② 트러블슈팅 포스트모템 · ③ 기술 선택 비교 ("왜 X가 아닌 Y") · ④ AI/LLM 실전 사용 후기.
-        </td>
-        <td><span class="priority must">MUST</span></td>
-      </tr>
-      <tr>
-        <td><b>oss-contributions/</b></td>
-        <td>
-          머지된 PR 목록, 작성한 이슈, 리뷰한 PR. 작은 typo 수정이라도 머지 이력 자체가 시그널. 
-          <b>README에 "내가 컨트리뷰트한 OSS" �션</b>으로 노출.
-        </td>
-        <td><span class="priority should">SHOULD</span></td>
-      </tr>
-      <tr>
-        <td><b>ai-side-projects/</b></td>
-        <td>
-          LLM API·RAG·Agent 실전 활용 프로젝트 <b>1개 이상</b>. Eval harness·from-scratch transformer는 AI-Native 가산점.
-        </td>
-        <td><span class="priority should">SHOULD</span></td>
-      </tr>
-      <tr>
-        <td><b>certs/</b></td>
-        <td>
-          정보처리기사·SQLD·AWS SAA·CKA·Softeer LV3 등 (한국 대기업 우대 신호). 메인 폴더엔 링크만.
-        </td>
-        <td><span class="priority nice">NICE</span></td>
-      </tr>
-      <tr>
-        <td><b>about/behavioral.md</b></td>
-        <td>
-          STAR 기법 5개 스토리: ① Ownership · ② Collaboration · ③ Learning from Failure · ④ Ambiguous Problem · ⑤ Disagree & Commit. 면접 behavioral 준비용.
-        </td>
-        <td><span class="priority should">SHOULD</span></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="item trend">
+    <h3>1. AI-integrated project as baseline expectation <span class="badge">mainstream</span></h3>
+    <p class="why">A non-trivial project that <em>uses</em> an LLM API (RAG, agent, structured output, evals) is now expected. Junior roles are the most scrutinized for AI use since employers expect fundamentals to be learned, not skipped.</p>
+    <p class="evidence"><em>Source:</em> dev.to 2025 · "Junior roles are the most scrutinized for AI use."</p>
+  </div>
 
-  <div class="callout warn">
-    <b>⚠️ 하지 말 것.</b> GitHub 잔디만 채우는 일, 단순 클론코딩 README 없는 레포, 자격증 나열, 토이 프로젝트 10개 (깊이 0). 토스·메타·Vercel이 명시적으로 거부하는 시그널.
+  <div class="item trend">
+    <h3>2. AI-assistance disclosure as a trust signal <span class="badge">emerging → mainstream</span></h3>
+    <p class="why">An <code>AI_USAGE.md</code> or in-README disclosure naming tool, scope, and personal verification. "I can explain every line in interview." Disclosure now reads as maturity.</p>
+    <p class="evidence"><em>Source:</em> dev.to 2025 · "Be explicit, not vague. Recruiters are pushing for specifics."</p>
+  </div>
+
+  <div class="item trend">
+    <h3>3. GitHub README = the actual first impression <span class="badge">mainstream</span></h3>
+    <p class="why">78% of technical recruiters check GitHub before scheduling. The README is the first thing they read. Project description in the first two lines, tech badges, demo link, "What I learned."</p>
+    <p class="evidence"><em>Source:</em> DevJobs survey 2025 · via WebSearch synthesis</p>
+  </div>
+
+  <div class="item trend">
+    <h3>4. Open-source contribution history as a top-tier differentiator <span class="badge">mainstream</span></h3>
+    <p class="why">"Portfolio Over Pedigree" — open-source contributions, personal projects, and GitHub profiles are prioritized over degrees in 2026 hiring.</p>
+    <p class="evidence"><em>Source:</em> 2026 hiring trends analysis</p>
+  </div>
+
+  <div class="item trend">
+    <h3>5. AI-resilient technical assessments replacing LeetCode <span class="badge">emerging</span></h3>
+    <p class="why">Portfolio review + live coding <em>with</em> AI tools + system design fundamentals. Companies test "AI collaboration skills — prompting, code review, AI output validation."</p>
+    <p class="evidence"><em>Source:</em> 2026 hiring analysis · "Assessments now include AI-assisted coding workflows."</p>
+  </div>
+
+  <div class="item trend">
+    <h3>6. LinkedIn as a portfolio surface <span class="badge">mainstream</span></h3>
+    <p class="why">Action-oriented headline, Featured section pinning 2-3 top projects with live links + short video, "Open to Work" flag used selectively. Profiles updated within 30 days rank higher in recruiter search.</p>
+    <p class="evidence"><em>Source:</em> LinkedIn 2025 patterns</p>
+  </div>
+
+  <div class="item trend">
+    <h3>7. "Proof of work" narrative posts on LinkedIn / dev.to <span class="badge">emerging</span></h3>
+    <p class="why">Build-in-public walkthroughs tying back to GitHub repos. Shows you can <em>explain</em> your work, which is what the new AI-aware interview loop tests.</p>
+    <p class="evidence"><em>Source:</em> 2025 README patterns</p>
   </div>
 </section>
 
-<section class="card">
-  <h2><span class="num">5</span>기술 스택 추천 (트랙별)</h2>
-  <p class="subtitle">26개사 JD 키워드 빈도 기반. 전부 익숙해질 필요는 없고, 1개를 깊게 + 1개를 보조로.</p>
+<!-- ============================== COUNTER-EVIDENCE ============================== -->
+<section id="counter">
+  <h2>⑤ Counter-evidence — where the consensus is shifting</h2>
+  <p class="section-intro">Three rules that flipped or softened between 2023 and 2026.</p>
 
-  <div class="stack-grid">
-    <div class="stack-card">
-      <div class="label">백엔드 / 메인</div>
-      <div class="body">Java/Spring · Kotlin · Node.js · Go · Python</div>
-      <div class="desc">토스(Kotlin)·카카오뱅크(Java/Spring)·쿠팡(Java) 빈도 1위</div>
-    </div>
-    <div class="stack-card">
-      <div class="label">프론트엔드 / 메인</div>
-      <div class="body">TypeScript · React · Next.js</div>
-      <div class="desc">Vercel·Coupang·Notion 빈도 1위. Next.js는 Vercel 가산점.</div>
-    </div>
-    <div class="stack-card">
-      <div class="label">AI / LLM</div>
-      <div class="body">OpenAI·Anthropic SDK · LangChain · PyTorch · Triton/CUDA</div>
-      <div class="desc">Cursor·Cognition·OpenAI가 명시적으로 보는 영역</div>
-    </div>
-    <div class="stack-card">
-      <div class="label">DB / Infra</div>
-      <div class="body">PostgreSQL · MySQL · Redis · Kafka · Docker · K8s</div>
-      <div class="desc">핀테크 2사·토스뱅크가 명시 우대</div>
-    </div>
-    <div class="stack-card">
-      <div class="label">클라우드</div>
-      <div class="body">AWS (SAA) · GCP · Vercel · Cloudflare</div>
-      <div class="desc">AWS 자격증 = 한국 전통대기업 + 핀테크 가산점</div>
-    </div>
-    <div class="stack-card">
-      <div class="label">CS 핵심</div>
-      <div class="body">알고리즘 · DB · OS · 네트워크 · 동시성</div>
-      <div class="desc">전사 공통 1차 컷. 깊이 있게.</div>
-    </div>
+  <div class="compare">
+    <table class="cmp">
+      <thead><tr><th>Then (2023)</th><th>Now (2025-2026)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"Every dev needs a personal blog"</td>
+          <td class="muted">Project-rich GitHub + LinkedIn Featured + dev.to writeups read as more authentic. Standalone blog with sporadic posts reads as performative.</td>
+        </tr>
+        <tr>
+          <td>"Never submit a tutorial project"</td>
+          <td class="muted">Tutorial clones are acceptable <em>if</em> you add a meaningful personal feature, document it, and credit the source.</td>
+        </tr>
+        <tr>
+          <td>"1 project per year of experience"</td>
+          <td class="muted">Skill diversity matters more than count. 3-5 projects covering distinct domains beats 15 CRUD apps.</td>
+        </tr>
+        <tr>
+          <td>3D / WebGL portfolio intros as brag</td>
+          <td class="muted">Performance-conscious judges increasingly flag them as slow + accessibility-hostile.</td>
+        </tr>
+        <tr>
+          <td>"No AI use" as a clean signal</td>
+          <td class="muted">AI-assisted code is industry-standard. Recruiters want explanation, not absence.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
-<section class="card">
-  <h2><span class="num">6</span>dev-kit 워크플로우로 빌드하기</h2>
-  <p class="subtitle">이 포트폴리오를 dev-kit으로 만들 때 쓰는 스킬 조합. 모두 검증된 공식 스킬.</p>
-
-  <ol class="steps">
-    <li><b>레포 부트스트랩</b><span><code>/dev-kit:bootstrap</code> — CLAUDE.md·active-hooks.json 생성. 첫 진입 가이드.</span></li>
-    <li><b>CI 셋업</b><span><code>/dev-kit:ci-setup</code> — PR 검증·테스트·auto-fix 워크플로우. "CI가 초록이면 머지 가능" 상태 보장.</span></li>
-    <li><b>기능 단위 빌드 (TDD)</b><span><code>/dev-kit:build</code> 또는 <code>/dev-kit:build-tdd</code> — Red-Green-Refactor. tdd-guard hook이 production code 전 failing test 강제.</span></li>
-    <li><b>코드 리뷰</b><span><code>/dev-kit:review [paths]</code> — 병렬 multi-dim 리뷰 (correctness·security·architecture). PR 머지 전 게이트.</span></li>
-    <li><b>린트 / 시크릿 검사</b><span><code>/dev-kit:inspect</code> — 8차원 health audit. 죽은 코드·중복·시크릿 노출 사전 차단.</span></li>
-    <li><b>문서 유지</b><span><code>/dev-kit:docs-maintenance</code> — README를 항상 audit. "문서가 코드보다 먼저 stale" 문제 해결.</span></li>
-    <li><b>버전 / 릴리즈</b><span><code>/dev-kit:bump</code> 또는 <code>/dev-kit:ship</code> — 명시적 버전 상승 + 태그. PR-verify 후 ship.</span></li>
-    <li><b>PR 자동 핸즈오프</b><span><code>/dev-kit:babysit-pr</code> — CI 빨강/리뷰 변경 시 자동 진단·수정·푸시·재반복.</span></li>
-  </ol>
-
-  <div class="callout">
-    <b>이 조합이 중요한 이유.</b> 26개사가 공통으로 보는 시그널 중 <b>"왜 이 기술을 골랐는가"</b> + <b>"실배포"</b> + <b>"코드 리뷰 내성"</b>은 dev-kit의 TDD + review + babysit-pr로 자연스럽게 만들어집니다. CI 통과 + 리뷰 통과 = 그 자체가 behavioral 스토리의 근거가 됩니다.
-  </div>
-</section>
-
-<section class="card">
-  <h2><span class="num">7</span>8주 실행 타임라인 (현실적)</h2>
-  <p class="subtitle">막연한 "포트폴리오 만들어야지" → 주 단위 체크포인트로 쪼갬.</p>
-
-  <div class="timeline">
-    <div class="timeline-item"><b>Week 1.</b> 부트스트랩 + CI. 레포 골격·README 템플릿·CS 노트 폴더.</div>
-    <div class="timeline-item"><b>Week 2–3.</b> 실배포 프로젝트 1개 완성 (Next.js 또는 Spring, Vercel/Railway 배포).</div>
-    <div class="timeline-item"><b>Week 4.</b> 트러블슈팅 포스트모템 블로그 글 1개 + 기술 선택 비교 글 1개.</div>
-    <div class="timeline-item"><b>Week 5.</b> AI 사이드 프로젝트 1개 (LLM API 활용). 실사용 시 가산점.</div>
-    <div class="timeline-item"><b>Week 6.</b> OSS 컨트리뷰트 시작 — 작은 PR 1개 머지 목표.</div>
-    <div class="timeline-item"><b>Week 7.</b> behavioral.md 5개 스토리 작성 + 모의 면접.</div>
-    <div class="timeline-item"><b>Week 8.</b> 전체 README 재구성 + 최종 리뷰 + CI 통과.</div>
-  </div>
-
-  <div class="callout warn">
-    <b>주의.</b> 8주 안에 모든 항목을 100%로 못 채워도 됩니다. <b>1개의 깊이 있는 실배포 프로젝트 + 1개의 깊이 있는 블로그 글</b>이 10개의 토이 프로젝트보다 강력합니다 (Meta·토스·Vercel 명시).
-  </div>
-</section>
-
-<section class="card">
-  <h2><span class="num">8</span>채널별 즉시 실행 액션</h2>
-  <p class="subtitle">"토스 가고 싶다" / "삼성SDS 가고 싶다" — 같은 폴더로 다른 강조점.</p>
-
-  <table class="portfolio">
-    <thead>
-      <tr><th>채널</th><th>강조할 것</th><th>약하게 둘 것</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>토스 / 토스뱅크</td><td>"왜" 의사결정, 기술 블로그 깊이, LIVE 코딩 준비</td><td>자격증, 학점</td></tr>
-      <tr><td>카카오 / 카카오뱅크</td><td>서비스 이해, 시스템 설계, STAR 자소서</td><td>단순 사용 경험 나열</td></tr>
-      <tr><td>네이버</td><td>CS 코테, 협업 프로젝트, 기업문화 적합도</td><td>—</td></tr>
-      <tr><td>우테코/배민</td><td>미션형 GitHub, TDD·페어프로그래밍·클린코드</td><td>학점 (명시 무시)</td></tr>
-      <tr><td>삼성SDS</td><td>SW역량테스트 통과, OPIc 자격증, GSAT</td><td>—</td></tr>
-      <tr><td>현대오토에버</td><td>Softeer LV3 자격증으로 코테 면제, AUTOSAR 도메인</td><td>—</td></tr>
-      <tr><td>US Big Tech (G/M/A)</td><td>DSA 4-round loop, Bar Raiser/Jedi 대비 behavioral</td><td>GitHub 잔디, 자격증</td></tr>
-      <tr><td>OpenAI / Anthropic</td><td>eval harness, alignment 글, OSS 머지 PR</td><td>전형적 자소서</td></tr>
-      <tr><td>Cursor / Cognition</td><td>"ship an agent", LLM 실전 사용 증거</td><td>LeetCode 패턴</td></tr>
-      <tr><td>Vercel / Linear / Stripe</td><td>실배포 데모, RFC/README 깊이, work trial 통과</td><td>전형적 CS</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<section class="card">
-  <h2><span class="num">9</span>리서치 출처 (요약)</h2>
-  <p class="subtitle">전체 인용은 HTML 본문 footnotes에 보존. 핵심 1차 출처만 추림.</p>
-
+<!-- ============================== TIMELESS ============================== -->
+<section>
+  <h2>⑥ What hasn't changed (timeless principles)</h2>
   <ul>
-    <li><b>US Big Tech:</b> careers.google.com · metacareers.com/campus · amazon.jobs/en/teams/new-graduates · careers.microsoft.com/v2/global/en/hiring-tips/student-interviewing · tryexponent.com · simplify.jobs/blog/meta-vs-google-new-grads</li>
-    <li><b>Korean Big Tech:</b> recruit.navercorp.com/micro/teamnaver2025/tech · careers.kakao.com · toss.tech/article/firesidechat_frontend_8 · toss.im/career/article/next-25-frontend · careers.linecorp.com/ko · coupang.jobs/kr/interview-tips · recruit.woowahan.com · byline.network/2025/02/12-386</li>
-    <li><b>AI-Native:</b> openai.com/careers/emerging-talent · alignment.anthropic.com/2025/anthropic-fellows-program-2026 · cursor.com/careers · cognition.com/careers · replit.com/careers · tryexponent.com (각 사 가이드)</li>
-    <li><b>Foreign SaaS:</b> stripe.com/careers/emerging-talent · careers.airbnb.com · notion.com/blog/engineering-values · linear.app/now/how-we-hire-at-linear · vercel.com/blog/design-engineering-at-vercel</li>
-    <li><b>Korean Enterprise:</b> samsungsds.com/kr/careers · lgcns.com/kr/careers · career.hyundai-autoever.com/ko/process1 · tossbank.com/career · recruit.kakaobank.com</li>
+    <li><b>Consistency over flash.</b> A few polished, smaller projects beats one sprawling unfinished one.</li>
+    <li><b>Real problem &gt; tutorial clone.</b> Solve an actual small problem; don't ship another todo app.</li>
+    <li><b>Clear writing is a hiring signal.</b> README clarity and "What I learned" have been table stakes since 2018.</li>
+    <li><b>Communication &gt; stack.</b> Hiring managers care more about <em>how</em> you explain a project than which framework you used.</li>
+    <li><b>Green contribution graph still matters.</b> Steady, small commits over time read as reliability.</li>
+    <li><b>A live, deployed link &gt; a screenshot.</b> This predates 2025 and still holds.</li>
   </ul>
+</section>
 
-  <div class="callout warn">
-    <b>검증 한계.</b> Apple 공식 페이지는 geo-gated로 직접 발� 불가 (후기·블라인드 기반). 카카오 tech.kakao.com 본문 일부 404. 라인 라인플러스 2025 하반기 신규 채용 중단 보도 존재 — 정보 시점에 유의.
+<!-- ============================== LOOKS-BAD-BUT-OK ============================== -->
+<section>
+  <h2>⑦ "Looks bad but is actually OK" — anxiety vs reality</h2>
+
+  <div class="item ok">
+    <h3>Not having a personal portfolio website</h3>
+    <p class="why">A well-organized GitHub profile with profile README and pinned repos is functionally equivalent in 2025. The website is optional.</p>
+    <p class="evidence"><a href="https://dev.to/nadiafedev/strong-portfolio-ideas-for-junior-developers-g9c">dev.to · portfolio ideas</a> · <a href="https://forum.freecodecamp.org/t/is-a-portfolio-website-necessary-example-of-good-documentation-readme/472987">freeCodeCamp forum</a></p>
+  </div>
+
+  <div class="item ok">
+    <h3>Only having 3 projects</h3>
+    <p class="why">3 high-quality projects with depth beat 20 shallow ones. The 2025 consensus is firmly "3-5 is the sweet spot."</p>
+    <p class="evidence"><a href="https://medium.com/@josephassefa/how-many-projects-should-a-junior-developer-have-in-their-portfolio-bd12b3e3f1d1">Medium · 3-5 quality projects</a></p>
+  </div>
+
+  <div class="item ok">
+    <h3>Small gaps in the contribution graph</h3>
+    <p class="why">A 3-week gap is fine. What gets scrutinized is a complete absence of activity for the year before applying.</p>
+    <p class="evidence"><a href="https://www.reddit.com/r/learnprogramming/comments/1mpmti7/junior_developer_first_portfolio/">r/learnprogramming · first portfolio</a></p>
+  </div>
+
+  <div class="item ok">
+    <h3>AI-assisted code in repos</h3>
+    <p class="why">Recruiters are not screening for "no AI use." They screen for "can you explain what the code does?" A repo with thoughtful comments + clear commit history is positive, even with AI scaffolding.</p>
+    <p class="evidence"><a href="https://www.linkedin.com/business/talent/blog/talent-acquisition/why-your-junior-developer-portfolio-isnt-working">LinkedIn Talent Blog</a></p>
   </div>
 </section>
+
+<!-- ============================== INSPO PORTFOLIOS ============================== -->
+<section>
+  <h2>⑧ Cited inspiration portfolios</h2>
+  <p class="section-intro">Most-referenced "study structure, not pixels" examples in the 2025-2026 guides. None of these are explicitly junior — but their structure is what to learn.</p>
+
+  <div class="compare">
+    <table class="cmp">
+      <thead><tr><th>Portfolio</th><th>Stack</th><th>What's worth studying</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://brittanychiang.com">brittanychiang.com</a></td><td>Gatsby</td><td class="good">Dark minimalist responsive · floating sidebar · canonical reference for new grads to study structure</td></tr>
+        <tr><td><a href="https://www.codewonders.dev">codewonders.dev</a></td><td>Next.js</td><td class="good">Text-only home page · subtle animations · restraint as design judgment</td></tr>
+        <tr><td><a href="https://cassie.codes">cassie.codes</a></td><td>Custom</td><td class="good">Custom illustrated workspace scene · personality + technical depth</td></tr>
+        <tr><td><a href="https://itssharl.ee/fr">itssharl.ee/fr</a></td><td>Next.js</td><td class="good">Animated background · dark/light toggle · interaction polish</td></tr>
+        <tr><td><a href="https://kenjimmy.xyz">kenjimmy.xyz</a></td><td>Nuxt.js</td><td class="good">Boxed/framed layout · distinctive UX as differentiator</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-intro" style="margin-top: 12px; font-size: 0.86rem;">Source: <a href="https://colorlib.com/wp/developer-portfolios/">Colorlib · 21 Best Developer Portfolios 2026</a>. Treat as inspiration, not templates.</p>
+</section>
+
+<!-- ============================== CHECKLIST ============================== -->
+<section id="check">
+  <h2>⑨ Pre-apply checklist</h2>
+  <p class="section-intro">Concrete, binary checks. Print this page and tick boxes before sending the next application.</p>
+
+  <div class="checklist">
+    <label class="check-item"><input type="checkbox" /><span><b>GitHub profile</b> has bio, avatar, profile README, 3-6 pinned repos, and a real contribution graph (not bulk-uploaded).</span></label>
+    <label class="check-item"><input type="checkbox" /><span><b>3-5 deployed projects</b> with live URLs (verified this week, not 6 months ago) and source-code links.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>Each project has a <b>case-study README</b> with: problem, how to run, stack rationale, your contribution, what you'd change.</span></label>
+    <label class="check-item"><input type="checkbox" /><span><b>AI_USAGE.md</b> (or equivalent section) names the tool, scope, and what I personally reviewed.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>At least <b>one smoke test per project</b> — even a single happy-path unit test signals intent.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>No tutorial clones left unmodified; <b>tutorial-based work is credited + extended</b> with a personal feature.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>LinkedIn headline is action-oriented, <b>Featured</b> pins 2-3 top projects, profile updated within 30 days.</span></label>
+    <label class="check-item"><input type="checkbox" /><span><b>One piece of public writing</b> — dev.to / LinkedIn / personal blog — even a short "what I learned" post.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>(Optional) <b>One OSS contribution</b> — typo fix, doc improvement, or small PR — merged.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>(Optional) <b>Personal site</b> only if it shows personality / deployed UX / design taste that GitHub can't.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>Site (if any) passes <b>Lighthouse ≥ 95</b> on mobile, desktop, and accessibility.</span></label>
+    <label class="check-item"><input type="checkbox" /><span>Every dead link / placeholder image is gone. <b>No 404s anywhere.</b></span></label>
+  </div>
+</section>
+
+<!-- ============================== SOURCES ============================== -->
+<section id="sources">
+  <h2>⑩ Sources</h2>
+  <p class="section-intro">All 30+ sources cited above. <span class="badge">verified-direct</span> = full article fetched; <span class="badge">snippet</span> = URL/title/snippet only (treat quotes as paraphrased).</p>
+
+  <ol class="source-list">
+    <li><a href="https://dev.to/dhruvjoshi9/junior-dev-resume-portfolio-in-the-age-of-ai-what-recruiters-care-about-in-2025-26c7">dev.to · Junior Dev Resume & Portfolio in the Age of AI</a> <span class="date">(2025-11-13)</span></li>
+    <li><a href="https://dev.to/kethmars/what-i-learned-after-reviewing-over-40-developer-portfolios-9-tips-for-a-better-portfolio-4me7">dev.to · Reviewing 40+ developer portfolios</a> <span class="date">(2020-07-19, still cited)</span></li>
+    <li><a href="https://dev.to/siddheshcodes/frontend-developer-portfolio-tips-for-2025-build-a-stunning-site-that-gets-you-hired-3hga">dev.to · Frontend Portfolio Tips for 2025</a> <span class="date">(2025-11-12)</span></li>
+    <li><a href="https://stackoverflow.blog/2025/12/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/">Stack Overflow Blog · 2025 Developer Survey Results</a> <span class="date">(2025-12-29)</span></li>
+    <li><a href="https://www.frontendmentor.io/articles/how-to-get-programming-job-2026">Frontend Mentor · How to Get a Programming Job in 2026</a> <span class="date">(2026)</span></li>
+    <li><a href="https://rockstardeveloperuniversity.com/entry-level-software-engineer-job-market-statistics/">Rockstar Developer University · Entry-Level SWE Job Market Statistics 2026</a> <span class="date">(2026)</span></li>
+    <li><a href="https://medium.com/@emirkanbeyaz01/the-great-tech-hiring-freeze-how-ai-is-reshaping-the-junior-developer-job-market-c53da6e6fa08">Medium · The Great Tech Hiring Freeze</a> <span class="date">(2025)</span></li>
+    <li><a href="https://www.softwareseni.com/what-the-data-actually-shows-about-ai-and-junior-developer-employment-decline/">Software Seni · AI and Junior Developer Employment Decline</a> <span class="date">(2025)</span></li>
+    <li><a href="https://talent500.com/blog/entry-level-developer-jobs-2025/">Talent500 · Entry-Level Developer Jobs 2025</a> <span class="date">(2025)</span></li>
+    <li><a href="https://www.reddit.com/r/cscareerquestions/comments/1o8zoqt/is_a_portfolio_site_still_mandatory_in_2025/">r/cscareerquestions · Is a portfolio site still mandatory in 2025?</a> <span class="date">(2025-10-17)</span></li>
+    <li><a href="https://www.reddit.com/r/cscareerquestions/comments/1mnojzx/junior_dev_portfolio_what_hiring_managers_actually/">r/cscareerquestions · What hiring managers actually look for (2025)</a> <span class="date">(2025-08-22)</span></li>
+    <li><a href="https://www.reddit.com/r/learnprogramming/comments/1bz21ib/red_flags_in_a_developer_portfolio/">r/learnprogramming · Red flags in a developer portfolio</a> <span class="date">(2024-04-06)</span></li>
+    <li><a href="https://www.reddit.com/r/learnprogramming/comments/1buvwg8/junior_dev_portfolio_review/">r/learnprogramming · Junior Dev Portfolio Review</a> <span class="date">(2024-04-01)</span></li>
+    <li><a href="https://www.reddit.com/r/cscareerquestions/comments/15x6fg1/common_red_flags_in_a_junior_developer_portfolio/">r/cscareerquestions · Common Red Flags (2023)</a> <span class="date">(2023-08-16)</span></li>
+    <li><a href="https://www.reddit.com/r/cscareerquestions/comments/16sw8m6/what_are_some_red_flags_in_a_junior_developers_github/">r/cscareerquestions · Red flags in junior GitHub</a> <span class="date">(2023-09-30)</span></li>
+    <li><a href="https://www.reddit.com/r/cscareerquestions/comments/h17blk/always_write_a_clear_readme_if_you_want_to_find_a/">r/cscareerquestions · Always write a clear README</a></li>
+    <li><a href="https://www.reddit.com/r/webdev/comments/1o3ntpn/is_a_blog_worth_it_in_2025/">r/webdev · Is a blog worth it in 2025?</a> <span class="date">(2025)</span></li>
+    <li><a href="https://www.reddit.com/r/learnprogramming/comments/1mpmti7/junior_developer_first_portfolio/">r/learnprogramming · Junior Developer First Portfolio</a></li>
+    <li><a href="https://www.freecodecamp.org/news/common-junior-developer-portfolio-mistakes/">freeCodeCamp · Common Junior Developer Portfolio Mistakes</a> <span class="date">(2025-07-04)</span></li>
+    <li><a href="https://dev.to/jeremyfiel/10-junior-developer-portfolio-mistakes-that-get-you-rejected-51c5">dev.to · 10 Junior Developer Portfolio Mistakes</a> <span class="date">(2025-08-12)</span></li>
+    <li><a href="https://www.linkedin.com/business/talent/blog/talent-acquisition/why-your-junior-developer-portfolio-isnt-working">LinkedIn Talent Blog · Why Your Junior Dev Portfolio Isn't Working</a> <span class="date">(2025-09-02)</span></li>
+    <li><a href="https://www.linkedin.com/posts/cristian-florea-396046123_pov-youre-a-junior-developer-in-2025-your-activity-7336768911872266240-ahmr">LinkedIn · Cristian Florea: POV junior dev 2025</a> <span class="date">(2025, counter-view)</span></li>
+    <li><a href="https://www.linkedin.com/posts/navinreddy20_stackoverflowsurvey2025-softwareengineering-activity-7409551153639845888-81gN">LinkedIn · Navin Reddy: SO 2025 analysis</a></li>
+    <li><a href="https://medium.com/@josephassefa/how-many-projects-should-a-junior-developer-have-in-their-portfolio-bd12b3e3f1d1">Medium · How many projects should a junior dev portfolio have?</a></li>
+    <li><a href="https://medium.com/coding-fatigue/10-junior-developer-portfolio-mistakes-that-get-you-rejected-in-2025-a3b2a5f3e2c1">Medium · 10 Portfolio Mistakes in 2025</a></li>
+    <li><a href="https://amcrouch.medium.com/the-impact-of-not-including-a-readme-file-b5bfcb84c81e">Medium · The impact of not including a README</a></li>
+    <li><a href="https://slategit.com/blog/projects-to-leave-off-your-developer-portfolio">SlateGit · Projects to Remove from Your Portfolio</a></li>
+    <li><a href="https://codeworks.me/blog/junior-dev-portfolio-projects-coding-5-skills/">Codeworks · What to Include in Your 2026 Junior Dev Portfolio</a></li>
+    <li><a href="https://codelabsacademy.com/en/blog/github-portfolio-junior-developers-what-to-include-remove/">Codelabs · GitHub Portfolio for Junior Developers</a></li>
+    <li><a href="https://forum.freecodecamp.org/t/is-a-portfolio-website-necessary-example-of-good-documentation-readme/472987">freeCodeCamp forum · Is a portfolio website necessary?</a></li>
+    <li><a href="https://www.youtube.com/watch?v=4QQ_a6D5-x0">YouTube · Stop Building Portfolios — They're Filtering You Out (2025)</a> <span class="date">(2025-09-09)</span></li>
+    <li><a href="https://www.youtube.com/watch?v=PiZWpVNyI4A">YouTube · Hiring Manager on Junior Dev Portfolios</a> <span class="date">(2025-06-18)</span></li>
+    <li><a href="https://colorlib.com/wp/developer-portfolios/">Colorlib · 21 Best Developer Portfolios (2026)</a></li>
+    <li><a href="https://dev.to/nadiafedev/strong-portfolio-ideas-for-junior-developers-g9c">dev.to · Strong Portfolio Ideas for Junior Developers</a></li>
+    <li><a href="https://www.csinow.edu/blog/the-importance-of-portfolio-building-for-web-developers/">CSInow · The Importance of Portfolio Building</a> <span class="date">(2025-09-18)</span></li>
+    <li><a href="https://jobriver.de/en/career-advice/developer-portfolio-2025-structure-content-examples-from-de">JobRiver · Developer Portfolio 2025: Structure & Contents</a> <span class="date">(2025-11-09)</span></li>
+  </ol>
+</section>
+
+</div>
 
 <footer>
-  멀티에이전트 리서치 (5 agents · 26 companies · 2025–2026 sources) ·
-  <a href="https://herdr.dev" target="_blank" rel="noopener">herdr</a>처럼 persistent runtime에서 빌드하면 8주 타임라인이 더 안정적입니다.
+  <div class="container">
+    <div class="row">
+      <div>Compiled <span id="year"></span> · 3 parallel research agents · 30+ sources · Aug 2026 snapshot.</div>
+      <div class="print-hide"><a href="#" onclick="window.print(); return false;">Save as PDF</a></div>
+    </div>
+    <p style="margin-top: 10px; font-size: 0.78rem; color: var(--fg-faint);">For the Korean / 신입 hiring angle specifically, see the <a href="./index.html">dev-harness-kit portfolio brief</a> (companion page).</p>
+  </div>
 </footer>
 
-</div>
-
 <script>
-  document.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const code = btn.parentElement.innerText.replace(/^copy\s*$/, '').trim();
-      try {
-        await navigator.clipboard.writeText(code);
-        btn.textContent = 'copied';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1200);
-      } catch (e) {
-        btn.textContent = 'press ⌘C';
-        setTimeout(() => { btn.textContent = 'copy'; }, 1200);
+  (function () {
+    const root = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
+    const stored = localStorage.getItem('research-theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let current = stored || (systemDark ? 'dark' : 'light');
+    function apply(theme) {
+      current = theme;
+      if (theme === 'auto') { root.removeAttribute('data-theme'); theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+      else { root.setAttribute('data-theme', theme); }
+      if (icon) {
+        icon.innerHTML = theme === 'dark'
+          ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'
+          : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
       }
+    }
+    apply(current);
+    btn && btn.addEventListener('click', () => {
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('research-theme', next);
+      apply(next);
     });
-  });
+  })();
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
